@@ -5,7 +5,19 @@
 </div>
 
 <h3>Список подій</h3>
-<table mat-table [dataSource]="eventsList" class="mat-elevation-z8">
+
+<div class="filter-wrapper">
+  <mat-form-field appearance="standard" >
+    <mat-label>Пошук</mat-label>
+    <input matInput name="filter"
+           (keyup)="applyFilter($event)"
+           placeholder="Пошук"
+           #searchInput>
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
   <!-- Id Column -->
   <ng-container matColumnDef="id">
@@ -54,5 +66,7 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="routeTo(row.id)"></tr>
 </table>
+
+<button mat-raised-button *ngIf="searchInput.value" (click)="downloadReport()">Скачати звіт</button>
 
 
