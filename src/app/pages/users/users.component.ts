@@ -1,4 +1,8 @@
 import {Component, OnInit} from '@angular/core';
+import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
+import {UserDialogComponent} from "./user-dialog/user-dialog.component";
+import {filter, take} from "rxjs";
 
 export interface User {
   inn: string;
@@ -11,11 +15,11 @@ export interface User {
 }
 
 enum Gender {
-  MALE="чоловіча",
-  FEMALE="жіноча"
+  MALE = "чоловіча",
+  FEMALE = "жіноча"
 }
 
-enum Degree {
+export enum Degree {
   MIDDLE = "середня",
   HIGHER = "вища",
   PRELIMINARY = "початкова"
@@ -63,12 +67,39 @@ const SAMPLE_DATA: User[] = [
 })
 export class UsersComponent implements OnInit {
   displayedColumns: string[] = ['number', 'inn', 'firstName', 'lastName', 'middleName', 'degree', 'workExperience', 'driverLicense', 'edit', 'remove'];
-  dataSource = SAMPLE_DATA;
+  dataSource: MatTableDataSource<User> = new MatTableDataSource<User>(SAMPLE_DATA);
 
-  constructor() {
+  constructor(private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
   }
 
+  removeUser(user: User) {
+    const index = this.dataSource.data.indexOf(user);
+    this.dataSource.data.splice(index, 1);
+    this.dataSource._updateChangeSubscription(); // Refresh the datasource
+  }
+
+  openUserCreationDialog() {
+    const dialogRef = this.dialog.open(UserDialogComponent, {width: '450px', data: {creation: true}});
+
+    dialogRef.afterClosed().pipe(take(1), filter((val) => !!val)).subscribe(result => {
+      this.dataSource.data.push(result);
+      this.dataSource._updateChangeSubscription();
+      console.log(result);
+    });
+  }
+
+  openUserEditDialog(user: User) {
+    const index = this.dataSource.data.indexOf(user);
+    const dialogRef = this.dialog.open(UserDialogComponent, {width: '450px', data: {creation: false, user}});
+
+    dialogRef.afterClosed().pipe(take(1), filter((val) => !!val)).subscribe(result => {
+      result.inn = this.dataSource.data[index].inn;
+      console.log(result);
+      this.dataSource.data[index] = result;
+      this.dataSource._updateChangeSubscription();
+    });
+  }
 }

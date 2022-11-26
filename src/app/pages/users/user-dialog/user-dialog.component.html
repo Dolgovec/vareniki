@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>{{title}}</h2>
+<mat-dialog-content>
+  <form class="user-form" [formGroup]="userForm">
+    <mat-form-field appearance="fill">
+      <mat-label>ІНН</mat-label>
+      <input matInput formControlName="inn">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Прізвище</mat-label>
+      <input matInput formControlName="lastName">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Ім'я</mat-label>
+      <input matInput formControlName="firstName">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>По-батькові</mat-label>
+      <input matInput formControlName="middleName">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Освіта</mat-label>
+      <mat-select formControlName="degree">
+        <mat-option *ngFor="let degree of degrees" [value]="degree">
+          {{degree}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Стаж роботи</mat-label>
+      <input matInput formControlName="workExperience">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Посвідчення водія</mat-label>
+      <input matInput formControlName="driverLicense">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button color="warn" mat-flat-button mat-dialog-close>Відмінити</button>
+  <button color="primary" (click)="submit()" [disabled]="userForm.invalid" mat-flat-button>Зберегти</button>
+</mat-dialog-actions>
+

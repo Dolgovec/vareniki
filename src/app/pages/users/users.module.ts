@@ -5,18 +5,30 @@ import {RouterModule} from "@angular/router";
 import {MatTableModule} from "@angular/material/table";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
+import { UserDialogComponent } from './user-dialog/user-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
 
 
 
 @NgModule({
   declarations: [
-    UsersComponent
+    UsersComponent,
+    UserDialogComponent
   ],
   imports: [
     CommonModule,
     MatTableModule,
     MatButtonModule,
     MatIconModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     RouterModule.forChild([{path: '', component: UsersComponent, pathMatch: 'full'}])
   ]
 })
