@@ -7,6 +7,12 @@
 <h3>Список подій</h3>
 <table mat-table [dataSource]="eventsList" class="mat-elevation-z8">
 
+  <!-- Id Column -->
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>№</th>
+    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+  </ng-container>
+
   <!-- Title Column -->
   <ng-container matColumnDef="title">
     <th mat-header-cell *matHeaderCellDef>Назва</th>
@@ -29,6 +35,12 @@
   <ng-container matColumnDef="admins">
     <th mat-header-cell *matHeaderCellDef> Керівники </th>
     <td mat-cell *matCellDef="let element"> {{element.admins}} </td>
+  </ng-container>
+
+  <!-- Dates Column -->
+  <ng-container matColumnDef="dates">
+    <th mat-header-cell *matHeaderCellDef> Дати </th>
+    <td mat-cell *matCellDef="let element">{{element.dateFrom | date: 'dd.MM.YYYY'}} - {{element.dateTo | date: 'dd.MM.YYYY'}}</td>
   </ng-container>
 
   <!-- Documents Columns -->

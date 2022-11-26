@@ -8,6 +8,8 @@ export interface IEvent {
   description: string;
   personal: string[];
   admins: string[];
+  dateFrom?: Date | string;
+  dateTo?: Date | string;
   documentLink?: string;
   status?: number;
 }
@@ -27,7 +29,9 @@ export class EventsComponent implements OnInit {
       personal: ['Іванов Дмитро', 'Левінський Богдан'],
       admins: ['Дуб Олексій'],
       documentLink: 'https://google.com',
-      status: 1
+      status: 1,
+      dateFrom: new Date('08/10/2022'),
+      dateTo:  new Date('08/15/2022'),
     },
     {
       id: 2,
@@ -37,10 +41,12 @@ export class EventsComponent implements OnInit {
       admins: ['Данілов Максим', 'Денис Кравецький'],
       documentLink: 'https://google.com',
       status: 1,
+      dateFrom: new Date('11/19/2022'),
+      dateTo: new Date('11/22/2022'),
     }
   ];
 
-  displayedColumns: string[] = ['title', 'description', 'admins', 'personal', 'document', ];
+  displayedColumns: string[] = ['id', 'dates', 'title', 'description', 'admins', 'personal', 'document'];
 
   constructor(private router: Router,
               private eventsService: EventsService) { }

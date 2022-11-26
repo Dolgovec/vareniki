@@ -63,6 +63,8 @@ export class EventPageComponent implements OnInit {
       description: ['', Validators.required],
       admins: [[], Validators.required],
       personal: [[]],
+      dateFrom: [],
+      dateTo: [],
     });
   }
 
@@ -76,6 +78,8 @@ export class EventPageComponent implements OnInit {
         description: 'Машина зламалася. Не їздить більше. Треба розібратися чому і полагодити її. Можливо треба буде закупити деталі.',
         personal: [this.users[2]],
         admins: [this.admins[1], this.admins[2]],
+        dateFrom: new Date('11/19/2022'),
+        dateTo: new Date('11/22/2022'),
         status: 1,
       }
     } else if (this.router.url.includes('1')) {
@@ -85,6 +89,8 @@ export class EventPageComponent implements OnInit {
         description: 'Потрібно закупити тісто для виготовлення вареників, бо воно вже закінчується. Для цього потрібно подзвонити на завод, замовити тісто, поїхати і забрати його',
         personal: [this.users[0], this.users[1]],
         admins: [this.admins[0]],
+        dateFrom: new Date('08/10/2022'),
+        dateTo:  new Date('08/15/2022'),
         status: 1,
       }
     }
@@ -94,9 +100,12 @@ export class EventPageComponent implements OnInit {
         title: this.event.title,
         admins: this.event.admins,
         description: this.event.description,
-        personal: this.event.personal
+        personal: this.event.personal,
+        dateFrom: this.event.dateFrom,
+        dateTo: this.event.dateTo,
       });
       if (this.event.status) {
+        console.log(this.form.getRawValue())
         this.form.disable();
       }
     }
@@ -112,6 +121,7 @@ export class EventPageComponent implements OnInit {
 
   confirmEvent(): void {
     this.isConfirmed = true;
+    console.log(this.form.getRawValue());
   }
 
   downloadDoc(): void {

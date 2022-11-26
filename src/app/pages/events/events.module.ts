@@ -12,7 +12,20 @@ import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatSelectModule} from "@angular/material/select";
 import {MatIconModule} from "@angular/material/icon";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MAT_DATE_FORMATS, MatNativeDateModule} from "@angular/material/core";
 
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'LL',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -29,7 +42,12 @@ import {MatIconModule} from "@angular/material/icon";
     MatInputModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatIconModule
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  ],
+  providers: [
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ]
 })
 export class EventsModule { }

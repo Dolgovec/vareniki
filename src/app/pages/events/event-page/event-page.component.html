@@ -32,6 +32,17 @@
     Створити подію і запросити керівників
   </button>
 
+  <div class="row" *ngIf="event?.id">
+    <mat-form-field appearance="fill">
+      <mat-label>Дати</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate formControlName="dateFrom" placeholder="Дата початку">
+        <input matEndDate formControlName="dateTo" placeholder="Дата кінця">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </div>
 
   <div class="row" *ngIf="event?.id">
     <mat-form-field appearance="fill">
