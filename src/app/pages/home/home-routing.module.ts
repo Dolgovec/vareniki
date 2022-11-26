@@ -6,13 +6,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
-    pathMatch: 'full',
-    children: [
-      {
-        path: 'events',
-        loadChildren: () => import('../events/events.module').then(m => m.EventsModule)
-      }
-    ]
+    pathMatch: 'full'
   }
 ];
 
