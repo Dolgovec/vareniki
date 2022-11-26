@@ -8,12 +8,14 @@ const routes: Routes = [
     path: '',
     component: EventsComponent,
     pathMatch: 'full',
-    children: [
-      {
-        path: ':id',
-        component: EventPageComponent
-      }
-    ]
+  },
+  {
+    path: 'events/:id',
+    component: EventPageComponent
+  },
+  {
+    path: 'events/new_event',
+    component: EventPageComponent
   }
 ];
 

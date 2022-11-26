@@ -1,1 +1,58 @@
-<p>event-page works!</p>
+<form [formGroup]="form">
+  <div class="row">
+    <mat-form-field appearance="fill">
+      <mat-label>Назва події</mat-label>
+      <input matInput formControlName="title">
+    </mat-form-field>
+  </div>
+
+
+  <div class="row">
+    <mat-form-field class="fill">
+      <mat-label>Опис події</mat-label>
+      <textarea matInput
+                placeholder="Розпишіть в деталях що потребно зробити. Після цього, додайте керівників, які відповідають за назначення штату"
+                formControlName="description"></textarea>
+    </mat-form-field>
+  </div>
+
+
+  <div class="row">
+    <mat-form-field appearance="fill">
+      <mat-label>Керівники</mat-label>
+      <mat-select formControlName="admins" multiple>
+        <mat-option *ngFor="let admin of admins" [value]="admin">
+          {{admin.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <button *ngIf="!event?.id" mat-raised-button color="primary" (click)="createNewEvent()" [disabled]="!form.valid">
+    Створити подію і запросити керівників
+  </button>
+
+
+  <div class="row" *ngIf="event?.id">
+    <mat-form-field appearance="fill">
+      <mat-label>Виконавці</mat-label>
+      <mat-select formControlName="personal" multiple>
+        <mat-option *ngFor="let user of users" [value]="user">
+          {{user.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <button *ngIf="event?.id && !event?.status" mat-raised-button color="primary" (click)="confirmEvent()" [disabled]="!form.valid || isConfirmed">
+    Підтвердити
+  </button>
+
+  <span *ngIf="isConfirmed">
+    Підтверджено! Чекаємо на підтвердження від інших керівників
+  </span>
+
+  <button *ngIf="event?.status" mat-raised-button color="primary" (click)="downloadDoc()">
+    Скачати документ
+  </button>
+</form>

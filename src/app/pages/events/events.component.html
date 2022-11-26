@@ -1,2 +1,46 @@
-<p>events works!</p>
-<router-outlet></router-outlet>
+<h2>Події</h2>
+
+<div class="btns-row">
+  <button class="action-btn" mat-raised-button color="primary" (click)="routeToNewEvent()">Створити подію</button>
+</div>
+
+<h3>Список подій</h3>
+<table mat-table [dataSource]="eventsList" class="mat-elevation-z8">
+
+  <!-- Title Column -->
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>Назва</th>
+    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+  </ng-container>
+
+  <!-- Description Columns -->
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef> Опис </th>
+    <td class="max-width" mat-cell *matCellDef="let element"> {{element.description}} </td>
+  </ng-container>
+
+  <!-- Personal Column -->
+  <ng-container matColumnDef="personal">
+    <th mat-header-cell *matHeaderCellDef> Виконувачі </th>
+    <td mat-cell *matCellDef="let element"> {{element.personal}} </td>
+  </ng-container>
+
+  <!-- Admins Column -->
+  <ng-container matColumnDef="admins">
+    <th mat-header-cell *matHeaderCellDef> Керівники </th>
+    <td mat-cell *matCellDef="let element"> {{element.admins}} </td>
+  </ng-container>
+
+  <!-- Documents Columns -->
+  <ng-container matColumnDef="document">
+    <th mat-header-cell *matHeaderCellDef> Документи </th>
+    <td mat-cell *matCellDef="let element">
+      <mat-icon color="primary" (click)="downloadDocument($event, element.documentLink)">description</mat-icon>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="routeTo(row.id)"></tr>
+</table>
+
+

@@ -7,10 +7,12 @@ import {EventsModule} from "./pages/events/events.module";
 import {Route, RouterModule} from "@angular/router";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 const routes: Route[] = [
   {
     path: '',
+    pathMatch: 'full',
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
   },
   {
@@ -25,6 +27,7 @@ const routes: Route[] = [
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HomeModule,
     EventsModule,
     RouterModule.forRoot(routes),
