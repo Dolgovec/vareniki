@@ -21,9 +21,9 @@ enum Gender {
 }
 
 export enum Degree {
-  MIDDLE = "середня",
-  HIGHER = "вища",
-  PRELIMINARY = "початкова"
+  MIDDLE = "Середня",
+  HIGHER = "Вища",
+  PRELIMINARY = "Початкова"
 }
 
 
@@ -95,8 +95,9 @@ export class UsersComponent implements OnInit {
     const dialogRef = this.dialog.open(UserDialogComponent, {width: '450px', data: {creation: true}});
 
     dialogRef.afterClosed().pipe(take(1), filter((val) => !!val)).subscribe(result => {
+      // this.userService.createUser(result).subscribe(console.log);
       this.dataSource.data.push(result);
-      this.dataSource._updateChangeSubscription();
+      this.dataSource.data = [...this.dataSource.data]
       console.log(result);
     });
   }
@@ -109,7 +110,7 @@ export class UsersComponent implements OnInit {
       result.inn = this.dataSource.data[index].inn;
       console.log(result);
       this.dataSource.data[index] = result;
-      this.dataSource._updateChangeSubscription();
+      this.dataSource.data = [...this.dataSource.data]
     });
   }
 }
