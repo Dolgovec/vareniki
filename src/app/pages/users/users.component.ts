@@ -3,15 +3,16 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatDialog} from "@angular/material/dialog";
 import {UserDialogComponent} from "./user-dialog/user-dialog.component";
 import {filter, take} from "rxjs";
+import {UsersService} from "../../services/users.service";
 
 export interface User {
   inn: string;
   firstName: string;
   middleName: string;
   lastName: string;
-  degree: Degree;
-  workExperience: number;
-  driverLicense: string;
+  education: string;
+  experience: number;
+  driversLicence: string;
 }
 
 enum Gender {
@@ -27,7 +28,7 @@ export enum Degree {
 
 
 // *** HARDCODED data
-const SAMPLE_DATA: User[] = [
+/*const SAMPLE_DATA: User[] = [
   {
     inn: "AE1111",
     firstName: "Юрій",
@@ -55,7 +56,7 @@ const SAMPLE_DATA: User[] = [
     workExperience: 2,
     driverLicense: "B"
   }
-];
+];*/
 
 // *******
 
@@ -66,13 +67,22 @@ const SAMPLE_DATA: User[] = [
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  displayedColumns: string[] = ['number', 'inn', 'firstName', 'lastName', 'middleName', 'degree', 'workExperience', 'driverLicense', 'edit', 'remove'];
-  dataSource: MatTableDataSource<User> = new MatTableDataSource<User>(SAMPLE_DATA);
+  displayedColumns: string[] = ['number', 'inn', 'firstName', 'lastName', 'middleName', 'education', 'experience', 'driversLicence', 'edit', 'remove'];
+  dataSource: MatTableDataSource<User> = new MatTableDataSource<User>();
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog,
+              private userService: UsersService) {
   }
 
   ngOnInit(): void {
+    this.userService.getUsers().subscribe({
+      next: (users: User[]) => {
+        console.log(users);
+        this.dataSource.data = users;
+      }, error: (err) => {
+        console.log('error!', err);
+      }
+    });
   }
 
   removeUser(user: User) {

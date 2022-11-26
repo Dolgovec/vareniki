@@ -11,6 +11,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatSelectModule} from "@angular/material/select";
+import {HttpClientModule} from "@angular/common/http";
 
 
 
@@ -22,6 +23,7 @@ import {MatSelectModule} from "@angular/material/select";
   imports: [
     CommonModule,
     MatTableModule,
+    HttpClientModule,
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
