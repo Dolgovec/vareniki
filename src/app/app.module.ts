@@ -12,12 +12,15 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 const routes: Route[] = [
   {
     path: '',
-    pathMatch: 'full',
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
   },
   {
     path: 'events',
     loadChildren: () => import('./pages/events/events.module').then(m => m.EventsModule)
+  },
+  {
+    path: 'users',
+    loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule)
   }
 ]
 
@@ -32,7 +35,8 @@ const routes: Route[] = [
     EventsModule,
     RouterModule.forRoot(routes),
     MatMenuModule,
-    MatButtonModule
+    MatButtonModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
