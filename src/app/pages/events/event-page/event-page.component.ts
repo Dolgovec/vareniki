@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators
 import {EventsService} from "../../../services/events.service";
 import {IEvent} from "../events.component";
 import {Router} from "@angular/router";
+import {UsersService} from "../../../services/users.service";
+import {User} from "../../users/users.component";
 
 @Component({
   selector: 'app-event-page',
@@ -57,6 +59,7 @@ export class EventPageComponent implements OnInit {
 
   constructor(private formBuilder: UntypedFormBuilder,
               private router: Router,
+              private usersService: UsersService,
               private eventsService: EventsService) {
     this.form = this.formBuilder.group({
       title: ['', Validators.required],
@@ -70,6 +73,9 @@ export class EventPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.event = this.eventsService.currentEvent;
+    this.usersService.getUsers().subscribe((users: User[]) => {
+      this.users = users.map((u: User) => ({inn: u.inn, name: u.firstName + ' ' + u.lastName}));
+    });
 
     if (this.router.url.includes('2')) {
       this.event = {

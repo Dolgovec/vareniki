@@ -19,4 +19,8 @@ export class UsersService {
     // disfunctional at the moment
     return this.http.post<User>(environment.employeeUrl, user);
   }
+
+  getDepartment(): Observable<any> {
+    return this.http.get('https://waren.herokuapp.com/department/root');
+  }
 }
