@@ -6,12 +6,22 @@ import {UsersService} from "../../services/users.service";
 
 interface OrgNode {
   title: string;
-  children?: OrgNode[] | JobContentNode[];
+  children?: OrgNode[];
+  positions?: OrgNode[];
+  employee?: {
+    "inn": string,
+    "firstName": string,
+    "middleName": string,
+    "lastName": string,
+    "education": string,
+    "experience": string,
+    "driversLicence": string
+  };
 }
 
 interface JobContentNode {
-  user?: User,
-  requirements: {
+  title: string;
+  employee: {
     education: Degree,
     experience: number,
     driversLicence: string
@@ -58,10 +68,20 @@ interface JobContentNode {
 })
 export class StructureComponent implements OnInit {
   treeControl = new NestedTreeControl<OrgNode>(node => {
+    let nestedTree: OrgNode[] = [];
     if (node.children) {
-      return node.children as OrgNode[];
+      nestedTree = [...nestedTree, ...node.children]
     }
-    return null;
+
+    if(node.positions) {
+      nestedTree = [...nestedTree, ...node.positions]
+    }
+
+    if(nestedTree.length > 0) {
+      return nestedTree;
+    } else {
+      return null;
+    }
   });
   dataSource = new MatTreeNestedDataSource<OrgNode>();
 
@@ -75,6 +95,6 @@ export class StructureComponent implements OnInit {
     });
   }
 
-  hasChild = (_: number, node: OrgNode) => !!node.children && node.children.length > 0;
+  hasChild = (_: number, node: OrgNode) => (!!node.children && node.children.length > 0) || (!!node.positions && node.positions.length >0);
 
 }

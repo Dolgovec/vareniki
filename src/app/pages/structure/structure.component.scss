@@ -29,12 +29,8 @@
   display: flex;
   justify-content: space-between;
 
-  .tree-block {
-    flex-basis: 65%;
-  }
-
-  .user-block {
-    flex-basis: 33%;
+  .tree-block  {
+    flex: 1
   }
 }
 
@@ -43,6 +39,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  border-bottom: 1px solid black;
 }
 
 .requirements-list {
