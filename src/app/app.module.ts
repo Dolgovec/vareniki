@@ -22,6 +22,10 @@ const routes: Route[] = [
   {
     path: 'users',
     loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule)
+  },
+  {
+    path: 'structure',
+    loadChildren: () => import('./pages/structure/structure.module').then(m => m.StructureModule)
   }
 ]
 
