@@ -15,6 +15,10 @@
            #searchInput>
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
+
+  <button class="report-btn" mat-raised-button *ngIf="searchInput.value" (click)="downloadReport()">
+    Скачати звіт
+  </button>
 </div>
 
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -22,31 +26,31 @@
   <!-- Id Column -->
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>№</th>
-    <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    <td mat-cell *matCellDef="let element" [innerHTML]="element.id | highlight: searchInput.value"></td>
   </ng-container>
 
   <!-- Title Column -->
   <ng-container matColumnDef="title">
     <th mat-header-cell *matHeaderCellDef>Назва</th>
-    <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+    <td mat-cell *matCellDef="let element" [innerHTML]="element.title | highlight: searchInput.value"></td>
   </ng-container>
 
   <!-- Description Columns -->
   <ng-container matColumnDef="description">
     <th mat-header-cell *matHeaderCellDef> Опис </th>
-    <td class="max-width" mat-cell *matCellDef="let element"> {{element.description}} </td>
+    <td class="max-width" mat-cell *matCellDef="let element" [innerHTML]="element.description | highlight: searchInput.value"></td>
   </ng-container>
 
   <!-- Personal Column -->
   <ng-container matColumnDef="personal">
     <th mat-header-cell *matHeaderCellDef> Виконувачі </th>
-    <td mat-cell *matCellDef="let element"> {{element.personal}} </td>
+    <td mat-cell *matCellDef="let element" [innerHTML]="element.personal | highlight: searchInput.value"></td>
   </ng-container>
 
   <!-- Admins Column -->
   <ng-container matColumnDef="admins">
     <th mat-header-cell *matHeaderCellDef> Керівники </th>
-    <td mat-cell *matCellDef="let element"> {{element.admins}} </td>
+    <td mat-cell *matCellDef="let element" [innerHTML]="element.admins | highlight: searchInput.value"></td>
   </ng-container>
 
   <!-- Dates Column -->
@@ -65,8 +69,12 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="routeTo(row.id)"></tr>
-</table>
 
-<button mat-raised-button *ngIf="searchInput.value" (click)="downloadReport()">Скачати звіт</button>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="12" *ngIf="searchInput.value">
+      Не знайдено записів
+    </td>
+  </tr>
+</table>
 
 

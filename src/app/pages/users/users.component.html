@@ -1,5 +1,13 @@
 <h1>Працівники компанії</h1>
 
+<div class="upload-wrapper">
+  <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+  <button mat-raised-button color="primary" (click)="fileUpload.click()">
+    <mat-icon>upload</mat-icon>
+    Завантажити працівників з файлу
+  </button>
+</div>
+
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 users-table">
   <ng-container matColumnDef="number">
     <th mat-header-cell *matHeaderCellDef> №</th>

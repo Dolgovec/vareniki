@@ -112,4 +112,28 @@ export class UsersComponent implements OnInit {
       this.dataSource.data = [...this.dataSource.data]
     });
   }
+
+  onFileSelected(event: Event): void {
+    // @ts-ignore
+    const file: File = (event.target as HTMLInputElement)?.files[0];
+
+
+      const formData = new FormData();
+
+      formData.append("files", file, file.name);
+
+      this.userService.uploadUsers(formData).subscribe({
+        next: (resp) => {
+          if (resp) {
+           this.userService.getUsers().subscribe((users: Array<User>) => {
+              this.dataSource.data = users;
+            });
+          }
+        },
+        error: (error) => {
+          console.log('error!', error);
+        }
+      });
+
+  }
 }

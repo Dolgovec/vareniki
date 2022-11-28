@@ -23,4 +23,8 @@ export class UsersService {
   getDepartment(): Observable<any> {
     return this.http.get('https://waren.herokuapp.com/department/root');
   }
+
+  uploadUsers(file: FormData): Observable<any> {
+    return this.http.post('https://waren.herokuapp.com/import/employees', file, {headers: {enctype: "multipart/form-data"}})
+  }
 }

@@ -14,6 +14,8 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatIconModule} from "@angular/material/icon";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MAT_DATE_FORMATS, MatNativeDateModule} from "@angular/material/core";
+import {AppModule} from "../../app.module";
+import {HighlightPipe} from "../../pipes/highlight.pipe";
 
 export const MY_FORMATS = {
   parse: {
@@ -30,22 +32,23 @@ export const MY_FORMATS = {
 @NgModule({
   declarations: [
     EventsComponent,
-    EventPageComponent
+    EventPageComponent,
+    HighlightPipe
   ],
-  imports: [
-    CommonModule,
-    EventsRoutingModule,
-    MatTableModule,
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatSelectModule,
-    MatIconModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-  ],
+    imports: [
+        CommonModule,
+        EventsRoutingModule,
+        MatTableModule,
+        MatButtonModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatSelectModule,
+        MatIconModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+    ],
   providers: [
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ]
