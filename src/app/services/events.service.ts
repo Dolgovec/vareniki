@@ -14,7 +14,5 @@ export class EventsService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(environment.orderUrl);
-  }
+
 }

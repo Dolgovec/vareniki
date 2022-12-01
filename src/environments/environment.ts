@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  employeeUrl: 'http://localhost:8080/employee',
-  orderUrl: 'http://localhost:8080/order'
+  backendUrl: 'http://localhost:8080',
 };
 
 /*

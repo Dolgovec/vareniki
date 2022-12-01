@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {HomeComponent} from "./home.component";
-import {AuthorizedGuard} from "../../guards/authorized.guard";
+import {LoginComponent} from "./login.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    pathMatch: 'full',
-    canActivate: [AuthorizedGuard]
+    component: LoginComponent,
+    pathMatch: 'full'
   }
 ];
 
@@ -16,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class HomeRoutingModule { }
+export class LoginRoutingModule { }

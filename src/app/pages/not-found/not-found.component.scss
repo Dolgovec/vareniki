@@ -1,0 +1,16 @@
+.page-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    font-size: 5em;
+    line-height: 1.5em;
+  }
+  h3 {
+    font-size: 1.5em;
+  }
+}

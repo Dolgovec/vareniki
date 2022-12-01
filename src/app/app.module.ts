@@ -8,30 +8,48 @@ import {Route, RouterModule} from "@angular/router";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatButtonModule} from "@angular/material/button";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {TokenInterceptor} from "./interceptors/token.interceptor";
+import {AuthService} from "./services/auth.service";
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import {AuthorizedGuard} from "./guards/authorized.guard";
+import {NotAuthorizedGuard} from "./guards/not-authorized.guard";
 
 const routes: Route[] = [
   {
     path: '',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
   },
   {
     path: 'events',
-    loadChildren: () => import('./pages/events/events.module').then(m => m.EventsModule)
+    loadChildren: () => import('./pages/events/events.module').then(m => m.EventsModule),
+    canLoad: [AuthorizedGuard]
   },
   {
     path: 'users',
-    loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule)
+    loadChildren: () => import('./pages/users/users.module').then(m => m.UsersModule),
+    canLoad: [AuthorizedGuard]
   },
   {
     path: 'structure',
-    loadChildren: () => import('./pages/structure/structure.module').then(m => m.StructureModule)
+    loadChildren: () => import('./pages/structure/structure.module').then(m => m.StructureModule),
+    canLoad: [AuthorizedGuard]
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
+    canLoad: [NotAuthorizedGuard]
+  },
+  {
+    path: '**',
+    component: NotFoundComponent
   }
 ]
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +62,14 @@ const routes: Route[] = [
     MatButtonModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

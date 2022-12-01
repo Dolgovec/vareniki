@@ -3,28 +3,32 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {User} from "../pages/users/users.component";
 import {environment} from "../../environments/environment";
+import {SharedService} from "./shared.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private sharedService: SharedService) { }
+
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(environment.employeeUrl);
+    return this.http.get<User[]>(this.sharedService.getFullUrl('employee'));
   }
 
   createUser(user: User): Observable<User> {
-    // disfunctional at the moment
-    return this.http.post<User>(environment.employeeUrl, user);
+    // endpoint not working at the moment
+    return this.http.post<User>(this.sharedService.getFullUrl('employee'), user);
   }
 
   getDepartment(): Observable<any> {
-    return this.http.get('https://waren.herokuapp.com/department/root');
+    return this.http.get(this.sharedService.getFullUrl('department/root'));
   }
 
   uploadUsers(file: FormData): Observable<any> {
-    return this.http.post('https://waren.herokuapp.com/import/employees', file, {headers: {enctype: "multipart/form-data"}})
+    return this.http.post(this.sharedService.getFullUrl('import/employees'), file, {headers: {enctype: "multipart/form-data"}});
   }
+
 }

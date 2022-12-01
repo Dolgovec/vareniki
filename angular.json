@@ -73,7 +73,8 @@
               "browserTarget": "vareniki:build:production"
             },
             "development": {
-              "browserTarget": "vareniki:build:development"
+              "browserTarget": "vareniki:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

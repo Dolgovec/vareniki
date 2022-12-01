@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {environment} from "../environments/environment";
+import {AuthService} from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,13 @@ import {environment} from "../environments/environment";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'vareniki';
+  title = 'Завод з виробництва вареників';
 
-  constructor() {
+  isAuthed: boolean;
+
+  constructor(private authServce: AuthService) {
     console.log('DEBUG env prod - ', environment.production);
+
+    this.isAuthed = this.authServce.isAuthed();
   }
 }
