@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {EventsService} from "../../services/events.service";
 import {MatTableDataSource} from "@angular/material/table";
+import { jsPDF } from "jspdf";
+import "../../Helvetica_Neue_OTS-normal";
 
 export interface IEvent {
   id: number;
@@ -113,47 +115,57 @@ export class EventsComponent implements OnInit {
     this.router.navigate([`events/new_event`]);
   }
 
-  downloadDocument(e: Event, url: string): void {
-    e.stopPropagation();
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.target = '_blank';
-    a.download = url.split('/').pop() || '';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  downloadReport(): void {
-    let text = 'Звіт \n\n';
+  downloadSingleReport(e: Event, report: IEvent): void {
+    e.stopPropagation();
+    const dateFrom = report.dateFrom?.toLocaleDateString();
+    const dateTo = report.dateTo?.toLocaleDateString();
+    const text = `Наказ номер ${report.id}
+
+    Дати на які він видавався: ${dateFrom} - ${dateTo}
+
+    Опис:
+    ${report.description}
+
+    Керівники: ${report.admins}
+
+    Виконувач: ${report.personal}`;
+
+    this.createAndSaveInPdf(text, `Звіт за наказом ${report.id}`);
+  }
+
+  downloadSearchReport(): void {
+    let text = `Звіт
+
+    `;
     this.dataSource.filteredData.forEach((o) => {
       const dateFrom = o.dateFrom?.toLocaleDateString();
       const dateTo = o.dateTo?.toLocaleDateString();
 
-      text += `Наказ номер: ${o.id}; Дати на які він видавався: ${dateFrom} - ${dateTo}; Виконувач: ${o.personal}\n`;
+      text += `
+      Наказ номер ${o.id}
+      Дати на які він видавався: ${dateFrom} - ${dateTo}
+      Виконувач: ${o.personal}
+
+      `;
     });
 
-    this.download(text, 'report.txt');
-
+    this.createAndSaveInPdf(text, `Звіт для ${this.dataSource.filter}`);
   }
 
-  private download(data: string, filename: string) {
-    const file = new Blob([data], {type: 'text/plain'});
-    let a = document.createElement("a"),
-      url = URL.createObjectURL(file);
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () {
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }, 0);
+  createAndSaveInPdf(text: string, fileName: string = 'report'): void {
+    // create PDF
+    const doc = new jsPDF();
+    // set UTF-8 font (Helvetica)
+    doc.addFont('Helvetica_Neue_OTS-normal.ttf', 'Helvetica_Neue_OTS', 'normal');
+    doc.setFont('Helvetica_Neue_OTS');
+    doc.text(text, 10, 10, {
+      maxWidth: 200
+    });
+    doc.save(`${fileName}.pdf`);
   }
 }

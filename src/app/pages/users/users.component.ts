@@ -15,6 +15,11 @@ export interface User {
   driversLicence: string;
 }
 
+export interface Director {
+  signed: boolean;
+  employee: User;
+}
+
 enum Gender {
   MALE = "чоловіча",
   FEMALE = "жіноча"

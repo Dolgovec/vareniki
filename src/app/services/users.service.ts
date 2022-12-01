@@ -18,6 +18,14 @@ export class UsersService {
     return this.http.get<User[]>(this.sharedService.getFullUrl('employee'));
   }
 
+  getUserByInn(id: string): Observable<User> {
+    return this.http.get<User>(this.sharedService.getFullUrl(`employee/${id}`));
+  }
+
+  uploadUsers(file: FormData): Observable<any> {
+    return this.http.post(this.sharedService.getFullUrl('import/employees'), file, {headers: {enctype: "multipart/form-data"}});
+  }
+
   createUser(user: User): Observable<User> {
     // endpoint not working at the moment
     return this.http.post<User>(this.sharedService.getFullUrl('employee'), user);
@@ -27,8 +35,6 @@ export class UsersService {
     return this.http.get(this.sharedService.getFullUrl('department/root'));
   }
 
-  uploadUsers(file: FormData): Observable<any> {
-    return this.http.post(this.sharedService.getFullUrl('import/employees'), file, {headers: {enctype: "multipart/form-data"}});
-  }
+
 
 }
