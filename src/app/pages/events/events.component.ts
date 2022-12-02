@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
-import {EventsService} from "../../services/events.service";
+import {EventsService, WorkOrder} from "../../services/events.service";
 import {MatTableDataSource} from "@angular/material/table";
 import { jsPDF } from "jspdf";
 import "../../Helvetica_Neue_OTS-normal";
@@ -11,8 +11,8 @@ export interface IEvent {
   description: string;
   personal: string[];
   admins: string[];
-  dateFrom?: Date;
-  dateTo?: Date;
+  fromDate?: Date;
+  toDate?: Date;
   documentLink?: string;
   status?: number;
 }
@@ -24,9 +24,11 @@ export interface IEvent {
 })
 export class EventsComponent implements OnInit {
 
-  dataSource = new MatTableDataSource<IEvent>();
+  dataSource = new MatTableDataSource<WorkOrder>();
 
-  eventsList: IEvent[] = [
+  eventsList: WorkOrder[] = [];
+
+/*  eventsList: IEvent[] = [
     {
       id: 1,
       title: 'Наряд на закупку тіста для вареників',
@@ -93,21 +95,24 @@ export class EventsComponent implements OnInit {
       dateFrom: new Date('10/19/2022'),
       dateTo: new Date('10/22/2022'),
     },
-  ];
+  ];*/
 
-  displayedColumns: string[] = ['id', 'dates', 'title', 'description', 'admins', 'personal', 'document'];
+  displayedColumns: string[] = ['id', 'eventDate', 'dates', 'title', 'description', 'admins', 'personal', 'document'];
 
   constructor(private router: Router,
               private eventsService: EventsService) {
   }
 
   ngOnInit(): void {
+    this.eventsService.getOrders().subscribe((result: WorkOrder[]) => {
+      this.dataSource.data = result;
+    });
+
     this.dataSource.data = this.eventsList;
   }
 
   routeTo(id: number): void {
     this.router.navigate([`events/${id}`]);
-    this.eventsService.currentEvent = this.eventsList.find(o => o.id === id) || null;
   }
 
   routeToNewEvent(): void {
@@ -120,10 +125,10 @@ export class EventsComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  downloadSingleReport(e: Event, report: IEvent): void {
+  downloadSingleReport(e: Event, report: WorkOrder): void {
     e.stopPropagation();
-    const dateFrom = report.dateFrom?.toLocaleDateString();
-    const dateTo = report.dateTo?.toLocaleDateString();
+    const dateFrom = report.fromDate?.toLocaleDateString();
+    const dateTo = report.toDate?.toLocaleDateString();
     const text = `Наказ номер ${report.id}
 
     Дати на які він видавався: ${dateFrom} - ${dateTo}
@@ -131,9 +136,9 @@ export class EventsComponent implements OnInit {
     Опис:
     ${report.description}
 
-    Керівники: ${report.admins}
+    Керівники: ${report.participants}
 
-    Виконувач: ${report.personal}`;
+    Виконувач: ${report.performers}`;
 
     this.createAndSaveInPdf(text, `Звіт за наказом ${report.id}`);
   }
@@ -143,13 +148,13 @@ export class EventsComponent implements OnInit {
 
     `;
     this.dataSource.filteredData.forEach((o) => {
-      const dateFrom = o.dateFrom?.toLocaleDateString();
-      const dateTo = o.dateTo?.toLocaleDateString();
+      const dateFrom = o.fromDate?.toLocaleDateString();
+      const dateTo = o.toDate?.toLocaleDateString();
 
       text += `
       Наказ номер ${o.id}
       Дати на які він видавався: ${dateFrom} - ${dateTo}
-      Виконувач: ${o.personal}
+      Виконувач: ${o.performers}
 
       `;
     });

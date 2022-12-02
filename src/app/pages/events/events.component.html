@@ -53,10 +53,16 @@
     <td mat-cell *matCellDef="let element" [innerHTML]="element.admins | highlight: searchInput.value"></td>
   </ng-container>
 
+  <!-- Event Creation date Column -->
+  <ng-container matColumnDef="eventDate">
+    <th mat-header-cell *matHeaderCellDef> Дата наказу </th>
+    <td mat-cell *matCellDef="let element">{{element.fromDate - 2 | date: 'dd.MM.YYYY'}} - {{element.toDate | date: 'dd.MM.YYYY'}}</td>
+  </ng-container>
+
   <!-- Dates Column -->
   <ng-container matColumnDef="dates">
     <th mat-header-cell *matHeaderCellDef> Дати </th>
-    <td mat-cell *matCellDef="let element">{{element.dateFrom | date: 'dd.MM.YYYY'}} - {{element.dateTo | date: 'dd.MM.YYYY'}}</td>
+    <td mat-cell *matCellDef="let element">{{element.fromDate | date: 'dd.MM.YYYY'}} - {{element.toDate | date: 'dd.MM.YYYY'}}</td>
   </ng-container>
 
   <!-- Documents Columns -->
@@ -73,6 +79,9 @@
   <tr class="mat-row" *matNoDataRow>
     <td class="mat-cell" colspan="12" *ngIf="searchInput.value">
       Не знайдено записів
+    </td>
+    <td class="mat-cell" colspan="12" *ngIf="!searchInput.value">
+      Ще не створено
     </td>
   </tr>
 </table>
