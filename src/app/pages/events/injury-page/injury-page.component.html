@@ -1,1 +1,148 @@
-<p>injury-page works!</p>
+<h2 class="mt-0">Форма події</h2>
+
+<form [formGroup]="step1Form" (ngSubmit)="submitStep1()">
+  <div class="step-block">
+    <div class="subheading">
+      <span>Крок 1</span>
+      <mat-icon *ngIf="isStep1Finished">check</mat-icon>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="fill">
+        <mat-label>Місце травми</mat-label>
+        <input matInput formControlName="place">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="fill">
+        <mat-label>Дата та час травми</mat-label>
+        <input matInput
+               [ngxMatDatetimePicker]="picker"
+               placeholder="Оберіть дату та час травми"
+               formControlName="dateTime"
+               [max]="todayDate">
+        <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+        <ngx-mat-datetime-picker #picker></ngx-mat-datetime-picker>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field class="fill">
+        <mat-label>Обставини травми</mat-label>
+        <textarea matInput
+                  placeholder="Розпишіть в деталях обставини травми"
+                  formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+
+    <button type="submit" mat-raised-button color="primary" [disabled]="!step1Form.valid">
+      Відправити
+    </button>
+  </div>
+</form>
+
+<form [formGroup]="step2Form" (ngSubmit)="submitStep2()" *ngIf="isStep1Finished">
+  <div class="step-block">
+    <div class="subheading">
+      <span>Крок 2</span>
+      <mat-icon *ngIf="isStep2Finished">check</mat-icon>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="fill">
+        <mat-label>Прикрепіть справку від мед.служби</mat-label>
+        <ngx-mat-file-input formControlName="receipt" [multiple]="false"></ngx-mat-file-input>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field class="fill">
+        <mat-label>Коментар мед.працівника</mat-label>
+        <textarea matInput
+                  placeholder="Можете додати коментар, якщо вважаєте за потрібне"
+                  formControlName="comment"></textarea>
+      </mat-form-field>
+    </div>
+
+    <button type="submit" mat-raised-button color="primary" [disabled]="!step2Form.valid">
+      Відправити
+    </button>
+  </div>
+</form>
+
+<form [formGroup]="step3Form" (ngSubmit)="submitStep3()" *ngIf="isStep2Finished">
+  <div class="step-block">
+    <div class="subheading">
+      <span>Крок 3</span>
+      <mat-icon *ngIf="isStep3Finished">check</mat-icon>
+    </div>
+
+    <div class="row mb-20">
+      <button type="button" mat-raised-button color="primary" (click)="downloadReceipt()">
+        Скачати справку мед.служби
+      </button>
+    </div>
+
+    <div class="row">
+      <mat-form-field class="fill">
+        <mat-label>Прогнозований об'єм виплат</mat-label>
+        <textarea matInput
+                  placeholder="Опишіть прогнозований об'єм виплат"
+                  formControlName="comment"></textarea>
+      </mat-form-field>
+    </div>
+
+    <button type="submit" mat-raised-button color="primary" [disabled]="!step3Form.valid">
+      Відправити
+    </button>
+  </div>
+</form>
+
+<form [formGroup]="step4Form" (ngSubmit)="submitStep4()" *ngIf="isStep3Finished">
+  <div class="step-block">
+    <div class="subheading">
+      <span>Крок 4</span>
+    </div>
+
+    <div class="row mb-20">
+      <button type="button" mat-raised-button color="primary" (click)="formFullDoc()">
+        Скачати повний документ
+      </button>
+    </div>
+
+    <div class="row">
+      <mat-form-field class="fill">
+        <mat-label>Ваш коментар</mat-label>
+        <textarea matInput
+                  placeholder="Можете щось додати"
+                  formControlName="comment"></textarea>
+      </mat-form-field>
+    </div>
+
+    <button type="submit" mat-raised-button color="primary" [disabled]="!step4Form.valid">
+      Я ознайомився із травмою та підтверджую дані у документі.
+    </button>
+  </div>
+</form>
+
+<div class="row">
+  <h2>Коментарі</h2>
+  <div class="comments-block" *ngIf="comments.length">
+    <div class="comment" *ngFor="let comment of comments">
+      <div class="comment-title">{{comment.name}}</div>
+      <div class="comment-text">{{comment.comment}}</div>
+    </div>
+  </div>
+
+  <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+    <mat-form-field class="fill">
+      <mat-label>Ваш коментар</mat-label>
+      <textarea matInput formControlName="comment"></textarea>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary" [disabled]="!commentForm.valid">
+      Відправити
+    </button>
+  </form>
+</div>

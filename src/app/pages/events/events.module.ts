@@ -18,6 +18,14 @@ import {HighlightPipe} from "../../pipes/highlight.pipe";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { InjuryPageComponent } from './injury-page/injury-page.component';
+import {
+  NGX_MAT_DATE_FORMATS,
+  NgxMatDateAdapter,
+  NgxMatDatetimePickerModule, NgxMatNativeDateModule,
+  NgxMatTimepickerModule
+} from "@angular-material-components/datetime-picker";
+import {NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, NgxMatMomentModule} from "@angular-material-components/moment-adapter";
+import {NgxMatFileInputModule} from "@angular-material-components/file-input";
 
 
 export const MY_FORMATS = {
@@ -26,6 +34,18 @@ export const MY_FORMATS = {
   },
   display: {
     dateInput: 'DD.MM.yyyy',
+    monthYearLabel: 'yyyy',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'yyyy',
+  },
+};
+
+export const MY_DATETIME_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD.MM.yyyy HH:mm',
     monthYearLabel: 'yyyy',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'yyyy',
@@ -52,11 +72,16 @@ export const MY_FORMATS = {
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxMatTimepickerModule,
+    NgxMatDatetimePickerModule,
+    NgxMatMomentModule,
+    NgxMatFileInputModule
   ],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
+    { provide: NGX_MAT_DATE_FORMATS, useValue: MY_DATETIME_FORMATS }
   ]
 })
 export class EventsModule { }
