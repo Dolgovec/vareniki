@@ -120,6 +120,10 @@ export class EventsComponent implements OnInit {
     this.router.navigate([`events/new_event`]);
   }
 
+  routeToInjury(): void {
+    this.router.navigate([`events/new_injury`]);
+  }
+
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

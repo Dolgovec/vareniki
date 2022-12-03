@@ -55,6 +55,19 @@
     </mat-form-field>
   </div>
 
+  <div class="row" *ngIf="event?.id">
+    <h3>Коментарі</h3>
+    <div class="comments-block">
+      <div class="comment" *ngFor="let comment of comments">
+
+      </div>
+    </div>
+    <mat-form-field class="fill">
+      <mat-label>Ваш коментар</mat-label>
+      <textarea matInput formControlName="comment"></textarea>
+    </mat-form-field>
+  </div>
+
   <button *ngIf="event?.id && !event?.status" mat-raised-button color="primary" (click)="editEvent()" [disabled]="!form.valid">
     Зберегти
   </button>

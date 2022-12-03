@@ -17,6 +17,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} fro
 import {HighlightPipe} from "../../pipes/highlight.pipe";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { InjuryPageComponent } from './injury-page/injury-page.component';
 
 
 export const MY_FORMATS = {
@@ -35,7 +36,8 @@ export const MY_FORMATS = {
   declarations: [
     EventsComponent,
     EventPageComponent,
-    HighlightPipe
+    HighlightPipe,
+    InjuryPageComponent
   ],
   imports: [
     CommonModule,

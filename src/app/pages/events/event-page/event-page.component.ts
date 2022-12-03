@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {EventsService} from "../../../services/events.service";
 import {IEvent} from "../events.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UsersService} from "../../../services/users.service";
 import {User} from "../../users/users.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
+
+export interface Comment {
+  name: string;
+  comment: string;
+}
 
 @Component({
   selector: 'app-event-page',
@@ -48,6 +53,17 @@ export class EventPageComponent implements OnInit {
   ];
 
   users: any[] = [];
+
+  comments: Comment[] = [
+    {
+      name: 'Денис Кравецький',
+      comment: 'Вважаю, що 4 працівників достатьо для цієї задачі'
+    },
+    {
+      name: 'Максим Данілов',
+      comment: 'А що вони там вчотирьох будуть робити? І двоє справляться'
+    }
+  ]
 
 
   constructor(private formBuilder: UntypedFormBuilder,
