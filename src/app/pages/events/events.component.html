@@ -17,7 +17,11 @@
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 
-  <button class="report-btn" mat-raised-button color="primary" *ngIf="searchInput.value" (click)="downloadSearchReport()">
+  <button class="report-btn"
+          mat-raised-button
+          color="primary"
+          *ngIf="searchInput.value && dataSource.filteredData.length"
+          (click)="downloadSearchReport()">
     Скачати звіт
   </button>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
+import {FormControl, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {EventsService} from "../../../services/events.service";
 import {IEvent} from "../events.component";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -20,6 +20,9 @@ export interface Comment {
 export class EventPageComponent implements OnInit {
 
   form: UntypedFormGroup = new UntypedFormGroup({});
+  commentForm: UntypedFormGroup = new UntypedFormGroup({
+    comment: new FormControl('', Validators.required),
+  });
   event!: IEvent | null;
 
   participants: any[] = [
@@ -85,11 +88,23 @@ export class EventPageComponent implements OnInit {
   ngOnInit(): void {
     if (this.route.snapshot.data) {
       this.event = this.route.snapshot.data['order'];
-    }
 
-    this.usersService.getUsers().subscribe((users: User[]) => {
-      this.users = users.map((u: User) => ({inn: u.inn, name: u.firstName + ' ' + u.lastName}));
-    });
+      this.form.patchValue({
+        title: this.event?.title,
+        admins: this.event?.admins,
+        description: this.event?.description,
+        personal: this.event?.personal,
+        fromDate: this.event?.fromDate,
+        toDate: this.event?.toDate,
+      });
+      if (this.event?.status) {
+        console.log(this.form.getRawValue())
+        this.form.disable();
+      }
+      this.usersService.getUsers().subscribe((users: User[]) => {
+        this.users = users.map((u: User) => ({inn: u.inn, name: u.firstName + ' ' + u.lastName}));
+      });
+    }
 
     this.usersService.getParticipants().subscribe({
       next: (participants: User[]) => {
@@ -99,21 +114,6 @@ export class EventPageComponent implements OnInit {
         console.log('error on getting participants', err);
       }
     });
-
-    if (this.event) {
-      this.form.patchValue({
-        title: this.event.title,
-        admins: this.event.admins,
-        description: this.event.description,
-        personal: this.event.personal,
-        fromDate: this.event.fromDate,
-        toDate: this.event.toDate,
-      });
-      if (this.event.status) {
-        console.log(this.form.getRawValue())
-        this.form.disable();
-      }
-    }
   }
 
   createNewEvent(): void {
@@ -151,6 +151,16 @@ export class EventPageComponent implements OnInit {
         duration: 3000,
       });
       this.router.navigate(['events']);
+    });
+  }
+
+  submitComment(): void {
+    this.comments.push({
+      name: 'Олексій Дуб',
+      comment: this.commentForm.get('comment')?.value
+    });
+    this.commentForm.patchValue({
+      comment: ''
     });
   }
 

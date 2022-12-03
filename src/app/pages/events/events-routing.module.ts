@@ -12,20 +12,20 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'events/:id',
-    component: EventPageComponent,
-    resolve: {
-      order: GetOrderByIdResolver
-    }
-  },
-  {
     path: 'events/new_event',
     component: EventPageComponent
   },
   {
     path: 'events/new_injury',
     component: InjuryPageComponent
-  }
+  },
+  {
+    path: 'events/:id',
+    component: EventPageComponent,
+    resolve: {
+      order: GetOrderByIdResolver
+    }
+  },
 ];
 
 @NgModule({

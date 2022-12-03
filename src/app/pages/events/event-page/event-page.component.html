@@ -1,3 +1,4 @@
+<h2 class="mt-0">Форма події</h2>
 <form [formGroup]="form">
   <div class="row">
     <mat-form-field appearance="fill">
@@ -55,19 +56,6 @@
     </mat-form-field>
   </div>
 
-  <div class="row" *ngIf="event?.id">
-    <h3>Коментарі</h3>
-    <div class="comments-block">
-      <div class="comment" *ngFor="let comment of comments">
-
-      </div>
-    </div>
-    <mat-form-field class="fill">
-      <mat-label>Ваш коментар</mat-label>
-      <textarea matInput formControlName="comment"></textarea>
-    </mat-form-field>
-  </div>
-
   <button *ngIf="event?.id && !event?.status" mat-raised-button color="primary" (click)="editEvent()" [disabled]="!form.valid">
     Зберегти
   </button>
@@ -80,3 +68,25 @@
     Скачати документ
   </button>
 </form>
+
+
+<div class="row" *ngIf="event?.id">
+  <h2>Коментарі</h2>
+  <div class="comments-block" *ngIf="comments.length">
+    <div class="comment" *ngFor="let comment of comments">
+      <div class="comment-title">{{comment.name}}</div>
+      <div class="comment-text">{{comment.comment}}</div>
+    </div>
+  </div>
+
+  <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+    <mat-form-field class="fill">
+      <mat-label>Ваш коментар</mat-label>
+      <textarea matInput formControlName="comment"></textarea>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary" [disabled]="!commentForm.valid">
+      Відправити
+    </button>
+  </form>
+</div>
