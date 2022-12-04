@@ -98,12 +98,8 @@ $nested-node-padding: 40px;
   margin: 0;
 }
 
-.mat-tree-node {
+.org-position-title {
   min-height: 40px;
-  //padding-left: 20px;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
 }
 
 .vacant-position, .incomplete-unit {
@@ -140,4 +136,10 @@ $nested-node-padding: 40px;
 
 .tree-bloc {
   padding: 1em;
+}
+
+.job-description {
+  // test styles
+  height: 200px;
+  width: 100px;
 }

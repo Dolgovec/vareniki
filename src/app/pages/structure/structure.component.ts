@@ -86,9 +86,38 @@ export class StructureComponent implements OnInit {
     );
   }
 
-  removeUnit(data: any) {
-    // this.dataSource
-    console.log('DEBUG removeUnit data - ', data);
+  removeUnit(node: OrgNode) {
+    console.log('DEBUG removeUnit data: ', node);
+    const path: Array<string> = node.fullTitle ? node.fullTitle.split(' - ') : [];
+    console.log('DEBUG removeUnit path: ', path);
+    let currentNode: OrgNode | null;
+    let currentChildren: Array<OrgNode> = this.dataSource.data;
+    path.forEach((seg: string) => {
+      console.log('DEBUG path segment: ', seg);
+      console.log('DEBUG starting currentChildren - ', currentChildren);
+      const nodeIndex: number = getNodeIndexByTitle(seg, currentChildren);
+      currentNode = nodeIndex > -1 ? currentChildren[nodeIndex] : null;
+      console.log('DEBUG current node remove unit - ', currentNode);
+      if (currentNode === node) {
+        currentChildren.splice(nodeIndex, 1);
+        this.renderTree();
+      }
+      currentChildren = (currentNode && currentNode.children) ? currentNode.children : [];
+      console.log('DEBUG next currentChildren - ', currentChildren);
+    });
+  }
+
+  renderTree() {
+    // CRUTCH
+    const updatedData = this.dataSource.data;
+    this.dataSource.data = [];
+    this.dataSource.data = updatedData;
+    this.nodesFullTitles = [];
+    this.dataSource.data.forEach((unit) => {
+      this.nodesFullTitles = [...this.nodesFullTitles, unit.title, ...getFullTitlesForNode(unit, '')];
+      console.log('DEBUG this.nodesFullTitles - ', this.nodesFullTitles);
+    });
+    this.tree.treeControl.dataNodes = updatedData;
   }
 
   expandAll() {
@@ -106,7 +135,7 @@ export class StructureComponent implements OnInit {
 
 }
 
-const checkIncomplete = function (unit: Unit): boolean {
+function checkIncomplete(unit: Unit): boolean {
   // console.log('DEBUG checkIncomplete unit - ', unit);
   let isUnitIncomplete: boolean = false;
 
@@ -127,7 +156,7 @@ const checkIncomplete = function (unit: Unit): boolean {
   return isUnitIncomplete;
 }
 
-const getFullTitlesForNode = function (unit: OrgNode | Unit, prefix: string): Array<string> {
+function getFullTitlesForNode(unit: OrgNode | Unit, prefix: string): Array<string> {
   let titles: Array<string> = [];
   const title = prefix + (prefix ? ' - ' : '') + unit.title;
   (unit as OrgNode).fullTitle = title;
@@ -140,6 +169,17 @@ const getFullTitlesForNode = function (unit: OrgNode | Unit, prefix: string): Ar
   }
 
   return titles;
+}
+
+function getNodeIndexByTitle(title: string, nodes: Array<OrgNode>): number {
+  let res = -1;
+  for (let i = 0; i < nodes.length; i++) {
+    if (title === nodes[i].title) {
+      res = i;
+      break;
+    }
+  }
+  return res;
 }
 
 export interface Unit {

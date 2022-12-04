@@ -34,9 +34,6 @@
 <div class="tree-block mat-elevation-z5">
   <mat-tree #organisationTree [dataSource]="dataSource" [treeControl]="treeControl" class="organisation-tree">
     <!-- This is the tree node template for leaf nodes -->
-    <!-- There is inline padding applied to this node using styles.
-      This padding value depends on the mat-icon-button width. -->
-
     <mat-tree-node class="org-position" [class.vacant-position]="!node.employee" *matTreeNodeDef="let node">
       <div class="org-position-title mat-h3">
         <mat-icon *ngIf="node.employee" class="org-position-icon">person</mat-icon>
@@ -47,6 +44,10 @@
             *ngIf="node.employee && showEmployees">{{node.employee?.lastName}} {{node.employee.firstName}} {{node.employee.middleName}}</span>
         </span>
       </div>
+
+      <!--<div class="job-description mat-elevation-z5">
+
+      </div>-->
 
       <!--leaf node: -->
       <!--<h3>{{node.title}}: {{node.employee?.lastName}} {{node.employee?.firstName}} {{node.employee?.middleName}} </h3>
@@ -89,9 +90,6 @@
         </button>
       </div>
 
-      <!-- There is inline padding applied to this div using styles.
-          This padding value depends on the mat-icon-button width.  -->
-
       <div [class.organisation-tree-invisible]="!treeControl.isExpanded(node)"
            class="nested-tree"
            role="group">
@@ -99,8 +97,6 @@
       </div>
     </mat-nested-tree-node>
   </mat-tree>
-
-  <!--<button mat-flat-button color="primary">Додати</button>-->
 </div>
 
 <button class="add-unit-btn" mat-fab color="primary" (click)="createUnit()">
