@@ -4,13 +4,16 @@ import {EventsService, WorkOrder} from "../../services/events.service";
 import {MatTableDataSource} from "@angular/material/table";
 import { jsPDF } from "jspdf";
 import "../../Helvetica_Neue_OTS-normal";
+import {Supervisor} from "../../services/users.service";
+import {Performer} from "./event-page/event-page.component";
+import * as moment from 'moment';
 
 export interface IEvent {
   id: number;
   title: string;
   description: string;
-  personal: string[];
-  admins: string[];
+  performers: Performer[];
+  participants: Supervisor[];
   fromDate?: Date;
   toDate?: Date;
   documentLink?: string;
@@ -24,94 +27,53 @@ export interface IEvent {
 })
 export class EventsComponent implements OnInit {
 
-  dataSource = new MatTableDataSource<WorkOrder>();
+  dataSource = new MatTableDataSource<any>();
 
   eventsList: WorkOrder[] = [];
 
-/*  eventsList: IEvent[] = [
-    {
-      id: 1,
-      title: 'Наряд на закупку тіста для вареників',
-      description: 'Потрібно закупити тісто для виготовлення вареників, бо воно вже закінчується. Для цього потрібно подзвонити на завод, замовити тісто, поїхати і забрати його',
-      personal: ['Іванов Дмитро', 'Левінський Богдан'],
-      admins: ['Дуб Олексій'],
-      documentLink: 'https://google.com',
-      status: 1,
-      dateFrom: new Date('08/10/2022'),
-      dateTo: new Date('08/15/2022'),
-    },
-    {
-      id: 2,
-      title: 'Наряд на техобслуговування машини',
-      description: 'Машина зламалася. Не їздить більше. Треба розібратися чому і полагодити її. Можливо треба буде закупити деталі.',
-      personal: ['Олександр Механіков'],
-      admins: ['Данілов Максим', 'Денис Кравецький'],
-      documentLink: 'https://google.com',
-      status: 1,
-      dateFrom: new Date('11/19/2022'),
-      dateTo: new Date('11/22/2022'),
-    },
-    {
-      id: 3,
-      title: 'Наряд на техобслуговування конвеєру',
-      description: 'Конвеэр зломався. Нехай хтось приде і починить.',
-      personal: ['Білий Максим', 'Крацюк Антон', 'Дуб Олексій'],
-      admins: ['Дуб Олексій', 'Денис Кравецький'],
-      documentLink: 'https://google.com',
-      status: 1,
-      dateFrom: new Date('11/02/2022'),
-      dateTo: new Date('11/05/2022'),
-    },
-    {
-      id: 4,
-      title: 'Закупити вішні',
-      description: 'Вишня для вареників закінчилися. Треба з"їздити до фермерів та купити',
-      personal: ['Олександр Механіков', 'Іванов Дмитро'],
-      admins: ['Данілов Максим'],
-      documentLink: 'https://google.com',
-      status: 1,
-      dateFrom: new Date('06/19/2022'),
-      dateTo: new Date('06/22/2022'),
-    },
-    {
-      id: 5,
-      title: 'Потрібнно забрати звіт',
-      description: 'Треба забрати скан документів по закупкам',
-      personal: ['Олександр Механіков', 'Крацюк Антон', 'Білий Максим',],
-      admins: ['Денис Кравецький'],
-      documentLink: 'https://google.com',
-      status: 1,
-      dateFrom: new Date('07/19/2022'),
-      dateTo: new Date('07/22/2022'),
-    },
-    {
-      id: 6,
-      title: 'Зробити щось важливе',
-      description: 'Треба поїхати на місце та зрозуміти що можно зробити',
-      personal: ['Олександр Механіков', 'Іванов Дмитро', 'Левінський Богдан'],
-      admins: ['Дуб Олексій', 'Денис Кравецький', 'Данілов Максим'],
-      documentLink: 'https://google.com',
-      status: 1,
-      dateFrom: new Date('10/19/2022'),
-      dateTo: new Date('10/22/2022'),
-    },
-  ];*/
-
-  displayedColumns: string[] = ['id', 'eventDate', 'dates', 'title', 'description', 'admins', 'personal', 'document'];
+  displayedColumns: string[] = ['id', 'startDate', 'dates', 'title', 'description', 'participants', 'performers', 'document'];
 
   constructor(private router: Router,
               private eventsService: EventsService) {
+    this.eventsList = this.eventsService.eventsList;
+
+    const formattedResult = this.eventsService.eventsList.map((o: WorkOrder) => {
+      return {
+        id: o.id,
+        startDate: moment(o.fromDate).subtract(2,'d'),
+        title: o.title,
+        description: o.description,
+        fromDate: o.fromDate,
+        toDate: o.toDate,
+        participants: o.participants?.map((o: Supervisor) => ' ' + o.employee?.firstName + ' ' + o.employee?.lastName),
+        performers: o.performers?.map((o: Performer) => ' ' + o.employee?.firstName + ' ' + o.employee?.lastName)
+      }
+    })
+    this.dataSource.data = formattedResult;
   }
 
   ngOnInit(): void {
-    this.eventsService.getOrders().subscribe((result: WorkOrder[]) => {
-      this.dataSource.data = result;
+   /* this.eventsService.getOrders().subscribe((result: WorkOrder[]) => {
+      const formattedResult = result.map((o: WorkOrder) => {
+        return {
+          id: o.id,
+          startDate: o.startDate || new Date(),
+          title: o.title,
+          description: o.description,
+          fromDate: o.fromDate,
+          toDate: o.toDate,
+          participants: o.participants?.map((o: Supervisor) => ' ' + o.employee?.firstName + ' ' + o.employee?.lastName),
+          performance: o.performers?.map((o: Performer) => ' ' + o.employee?.firstName + ' ' + o.employee?.lastName)
+        }
+      })
+      this.dataSource.data = formattedResult;
     });
 
-    this.dataSource.data = this.eventsList;
+    this.dataSource.data = this.eventsList;*/
   }
 
   routeTo(id: number): void {
+    this.eventsService.currentEvent = this.eventsService.eventsList.find(o => o.id === id)!;
     this.router.navigate([`events/${id}`]);
   }
 
@@ -131,9 +93,9 @@ export class EventsComponent implements OnInit {
 
   downloadSingleReport(e: Event, report: WorkOrder): void {
     e.stopPropagation();
-    const dateFrom = report.fromDate?.toLocaleDateString();
-    const dateTo = report.toDate?.toLocaleDateString();
-    const text = `Наказ номер ${report.id}
+    const dateFrom = moment(report.fromDate).format('DD.MM.YYYY');
+    const dateTo = moment(report.toDate).format('DD.MM.YYYY');
+    const text = `Наказ номер ${report.id} від ${moment(report.startDate).format('DD.MM.YYYY')}
 
     Дати на які він видавався: ${dateFrom} - ${dateTo}
 
@@ -152,11 +114,11 @@ export class EventsComponent implements OnInit {
 
     `;
     this.dataSource.filteredData.forEach((o) => {
-      const dateFrom = o.fromDate?.toLocaleDateString();
-      const dateTo = o.toDate?.toLocaleDateString();
+      const dateFrom = moment(o.fromDate).format('DD.MM.YYYY');
+      const dateTo = moment(o.toDate).format('DD.MM.YYYY');
 
       text += `
-      Наказ номер ${o.id}
+      Наказ номер ${o.id} від ${moment(o.startDate).format('DD.MM.YYYY')}
       Дати на які він видавався: ${dateFrom} - ${dateTo}
       Виконувач: ${o.performers}
 

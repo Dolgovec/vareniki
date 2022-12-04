@@ -22,8 +22,8 @@
     <mat-form-field appearance="fill">
       <mat-label>Керівники</mat-label>
       <mat-select formControlName="participants" multiple>
-        <mat-option *ngFor="let admin of participants" [value]="admin">
-          {{admin.firstName + ' ' + admin.lastName}}
+        <mat-option *ngFor="let admin of supervisors" [value]="admin">
+          {{admin.employee?.firstName + ' ' + admin.employee?.lastName}}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -48,9 +48,9 @@
   <div class="row" *ngIf="event?.id">
     <mat-form-field appearance="fill">
       <mat-label>Виконавці</mat-label>
-      <mat-select formControlName="personal" multiple>
-        <mat-option *ngFor="let user of users" [value]="user">
-          {{user.name}}
+      <mat-select formControlName="performers" multiple>
+        <mat-option *ngFor="let user of performers" [value]="user">
+          {{user.employee.firstName + ' ' + user.employee.lastName}}
         </mat-option>
       </mat-select>
     </mat-form-field>

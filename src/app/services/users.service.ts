@@ -5,6 +5,13 @@ import {User} from "../pages/users/users.component";
 import {environment} from "../../environments/environment";
 import {SharedService} from "./shared.service";
 
+export interface Supervisor {
+  id: number;
+  employee: User;
+  title?: string;
+  signed?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,8 +25,8 @@ export class UsersService {
     return this.http.get<User[]>(this.sharedService.getFullUrl('employee'));
   }
 
-  getParticipants(): Observable<User[]> {
-    return this.http.get<User[]>(this.sharedService.getFullUrl('participants'));
+  getSupervisors(): Observable<Supervisor[]> {
+    return this.http.get<Supervisor[]>(this.sharedService.getFullUrl('order/supervizors'));
   }
 
   getUserByInn(id: string): Observable<User> {

@@ -23,7 +23,7 @@ const routes: Routes = [
     path: 'events/:id',
     component: EventPageComponent,
     resolve: {
-      order: GetOrderByIdResolver
+      //order: GetOrderByIdResolver
     }
   },
 ];
