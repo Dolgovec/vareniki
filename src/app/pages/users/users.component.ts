@@ -120,7 +120,7 @@ export class UsersComponent implements OnInit {
 
       const formData = new FormData();
 
-      formData.append("files", file, file.name);
+      formData.append("file", file, file.name);
 
       this.userService.uploadUsers(formData).subscribe({
         next: (resp) => {
