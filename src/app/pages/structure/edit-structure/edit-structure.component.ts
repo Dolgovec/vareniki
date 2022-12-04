@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Degree, User} from "../../users/users.component";
+import {Degree} from "../../users/users.component";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
@@ -25,10 +25,11 @@ export class EditStructureComponent implements OnInit {
   });
 
   departmentForm: FormGroup = new FormGroup({
-    name: new FormControl('', Validators.required)
+    title: new FormControl('', Validators.required)
   });
 
   positionForm: FormGroup = new FormGroup({
+    title: new FormControl('', Validators.required),
     education: new FormControl('', Validators.required),
     experience: new FormControl('', Validators.required),
     driversLicence: new FormControl('', Validators.required)
@@ -40,21 +41,31 @@ export class EditStructureComponent implements OnInit {
   ngOnInit(): void {
     this.parentNodes = [this.emptyNode, ...this.data.nodesFullTitles];
     console.log('DEBUG parentNodes: ', this.parentNodes);
-    if(this.data?.selectedNode) {
+    if (this.data?.selectedNode) {
       this.unitForm.controls['parentNode'].setValue(this.data.selectedNode)
     } else {
       this.unitForm.controls['parentNode'].setValue(this.parentNodes[0])
     }
     this.unitForm.controls['parentNode'].disable();
 
-    if(this.data?.selectedUnitType) {
+    if (this.data?.selectedUnitType) {
       this.unitForm.controls['unitType'].setValue(this.data.selectedUnitType);
       this.unitForm.controls['unitType'].disable();
     }
   }
 
   submit() {
-    this.dialogRef.close();
+    let resultMap = {...this.unitForm.value};
+    if (this.unitForm.controls['unitType'].value === UnitType.POSITION) {
+      resultMap = {...resultMap, ...this.positionForm.value};
+    } else {
+      resultMap = {...resultMap, ...this.departmentForm.value};
+    }
+
+    if (resultMap.parentNode === this.emptyNode) {
+      resultMap.parentNode = '';
+    }
+    this.dialogRef.close(resultMap);
   }
 
 }

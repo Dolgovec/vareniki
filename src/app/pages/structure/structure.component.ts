@@ -2,8 +2,9 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTreeNestedDataSource} from "@angular/material/tree";
 import {NestedTreeControl} from "@angular/cdk/tree";
 import {UsersService} from "../../services/users.service";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {EditStructureComponent, UnitType} from "./edit-structure/edit-structure.component";
+import {filter, take} from "rxjs";
 
 @Component({
   selector: 'app-structure',
@@ -35,14 +36,13 @@ export class StructureComponent implements OnInit {
   ngOnInit(): void {
     this.userService.getDepartment().subscribe((resp: Array<Unit>) => {
       resp?.forEach((unit) => {
-        console.log('DEBUG resp.forEach - ', unit);
+        // console.log('DEBUG resp.forEach - ', unit);
         (unit as OrgNode).incompleteUnit = checkIncomplete(unit);
       });
 
       this.dataSource.data = resp;
       this.dataSource.data.forEach((unit) => {
         this.nodesFullTitles = [...this.nodesFullTitles, unit.title, ...getFullTitlesForNode(unit, '')];
-        console.log('DEBUG this.nodesFullTitles - ', this.nodesFullTitles);
       });
       this.tree.treeControl.dataNodes = resp;
     });
@@ -53,7 +53,7 @@ export class StructureComponent implements OnInit {
   }
 
   createUnit() {
-    this.dialog.open(EditStructureComponent,
+    const dialogRef: MatDialogRef<any> = this.dialog.open(EditStructureComponent,
       {
         width: '450px',
         data: {
@@ -62,6 +62,15 @@ export class StructureComponent implements OnInit {
         }
       }
     );
+
+    dialogRef.afterClosed().pipe(take(1), filter((val) => !!val)).subscribe((val) => {
+      console.log('DEBUG dialogRef.afterClosed: ', val);
+      this.dataSource.data.push({
+        title: val.title,
+        isDepartment: true
+      })
+      this.renderTree();
+    });
   }
 
   addSubUnit(node: OrgNode) {
@@ -74,7 +83,7 @@ export class StructureComponent implements OnInit {
       selectedUnitType = UnitType.DEPARTMENT;
     }
 
-    this.dialog.open(EditStructureComponent,
+    const dialogRef: MatDialogRef<any> = this.dialog.open(EditStructureComponent,
       {
         width: '450px',
         data: {
@@ -84,6 +93,40 @@ export class StructureComponent implements OnInit {
         }
       }
     );
+
+    dialogRef.afterClosed().pipe(take(1), filter((val) => !!val)).subscribe((val) => {
+      const path: Array<string> = node.fullTitle ? node.fullTitle.split(' - ') : [];
+      let currentNode: OrgNode | null;
+      let currentChildren: Array<OrgNode> = this.dataSource.data;
+      path.forEach((seg: string) => {
+        const nodeIndex: number = getNodeIndexByTitle(seg, currentChildren);
+        currentNode = nodeIndex > -1 ? currentChildren[nodeIndex] : null;
+        if (currentNode === node) {
+          if (selectedUnitType === UnitType.POSITION) {
+            if (!currentNode.positions) {
+              currentNode.positions = [];
+            }
+            currentNode.positions.push({
+              title: val.title
+            });
+          } else {
+            if (!currentNode.children) {
+              currentNode.children = [];
+            }
+            currentNode.children.push({
+              title: val.title,
+              fullTitle: currentNode.fullTitle + ' - ' + val.title,
+              isDepartment: true
+            });
+          }
+          this.tree.treeControl.expand(currentNode);
+          this.renderTree();
+        } else {
+          currentChildren = (currentNode && currentNode.children) ? currentNode.children : [];
+        }
+      });
+      console.log('DEBUG dialogRef.afterClosed: ', val);
+    });
   }
 
   removeUnit(node: OrgNode) {
@@ -93,17 +136,14 @@ export class StructureComponent implements OnInit {
     let currentNode: OrgNode | null;
     let currentChildren: Array<OrgNode> = this.dataSource.data;
     path.forEach((seg: string) => {
-      console.log('DEBUG path segment: ', seg);
-      console.log('DEBUG starting currentChildren - ', currentChildren);
       const nodeIndex: number = getNodeIndexByTitle(seg, currentChildren);
       currentNode = nodeIndex > -1 ? currentChildren[nodeIndex] : null;
-      console.log('DEBUG current node remove unit - ', currentNode);
       if (currentNode === node) {
         currentChildren.splice(nodeIndex, 1);
         this.renderTree();
+      } else {
+        currentChildren = (currentNode && currentNode.children) ? currentNode.children : [];
       }
-      currentChildren = (currentNode && currentNode.children) ? currentNode.children : [];
-      console.log('DEBUG next currentChildren - ', currentChildren);
     });
   }
 
@@ -115,7 +155,6 @@ export class StructureComponent implements OnInit {
     this.nodesFullTitles = [];
     this.dataSource.data.forEach((unit) => {
       this.nodesFullTitles = [...this.nodesFullTitles, unit.title, ...getFullTitlesForNode(unit, '')];
-      console.log('DEBUG this.nodesFullTitles - ', this.nodesFullTitles);
     });
     this.tree.treeControl.dataNodes = updatedData;
   }
@@ -131,7 +170,7 @@ export class StructureComponent implements OnInit {
     this.tree.treeControl.collapseAll();
   }
 
-  hasChild = (_: number, node: OrgNode) => (!!node.children && node.children.length > 0) || (!!node.positions && node.positions.length > 0);
+  hasChild = (_: number, node: OrgNode) => (!!node.children && node.children.length > 0) || (!!node.positions && node.positions.length > 0) || node.isDepartment;
 
 }
 
@@ -162,9 +201,13 @@ function getFullTitlesForNode(unit: OrgNode | Unit, prefix: string): Array<strin
   (unit as OrgNode).fullTitle = title;
   if (unit.positions && unit.positions.length > 0) {
     return [title];
-  } else if (unit.children && unit.children.length > 0) {
-    for (let i = 0; i < unit.children.length; i++) {
-      titles = [...titles, ...getFullTitlesForNode(unit.children[i], title)];
+  } else if ((unit as OrgNode).isDepartment || (unit.children && unit.children.length > 0)) {
+    if (unit.children && unit.children.length > 0) {
+      for (let i = 0; i < unit.children.length; i++) {
+        titles = [...titles, ...getFullTitlesForNode(unit.children[i], title)];
+      }
+    } else {
+      return [title]
     }
   }
 
@@ -197,13 +240,13 @@ export interface Position {
 }
 
 export interface Employee {
-  inn: string,
-  firstName: string,
-  middleName: string,
-  lastName: string,
-  education: string,
-  experience: string,
-  driversLicence: string
+  inn?: string,
+  firstName?: string,
+  middleName?: string,
+  lastName?: string,
+  education?: string,
+  experience?: string,
+  driversLicence?: string
 }
 
 // TODO: bring it to order
@@ -213,46 +256,6 @@ interface OrgNode {
   positions?: OrgNode[];
   incompleteUnit?: boolean;
   fullTitle?: string;
-  employee?: {
-    "inn": string,
-    "firstName": string,
-    "middleName": string,
-    "lastName": string,
-    "education": string,
-    "experience": string,
-    "driversLicence": string
-  };
+  employee?: Employee;
+  isDepartment?: boolean; // Temporary solution
 }
-
-/*const TREE_DATA: OrgNode[] = [
-  {
-    name: 'Управління',
-    children: [
-      {
-        name: 'Дирекція',
-        children: [
-          {
-            name: "Директор",
-            children: [
-              {
-                requirements: {
-                  education: Degree.HIGHER,
-                  experience: 5,
-                  driversLicence: 'B'
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    name: 'Виробництво',
-    children: [
-      {
-        name: 'Перший цех'
-      }
-    ]
-  }
-];*/

@@ -26,7 +26,7 @@
 
     <mat-form-field appearance="fill">
       <mat-label>Назва відділу</mat-label>
-      <input matInput formControlName="name">
+      <input matInput formControlName="title">
     </mat-form-field>
   </form>
 
@@ -34,6 +34,11 @@
     <h2>Параметри посади</h2>
 
     <mat-form-field appearance="fill">
+      <mat-label>Назва посади</mat-label>
+      <input matInput formControlName="title">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
       <mat-label>Освіта</mat-label>
       <mat-select [disableOptionCentering]="true" formControlName="education">
         <mat-option *ngFor="let degree of degrees" [value]="degree">
@@ -56,50 +61,6 @@
       </mat-select>
     </mat-form-field>
   </form>
-  <!--<form class="user-form" [formGroup]="userForm">
-    <mat-form-field appearance="fill">
-      <mat-label>ІНН</mat-label>
-      <input matInput formControlName="inn">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Прізвище</mat-label>
-      <input matInput formControlName="lastName">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Ім'я</mat-label>
-      <input matInput formControlName="firstName">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>По-батькові</mat-label>
-      <input matInput formControlName="middleName">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Освіта</mat-label>
-      <mat-select [disableOptionCentering]="true" formControlName="education">
-        <mat-option *ngFor="let degree of degrees" [value]="degree">
-          {{degree}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Стаж роботи</mat-label>
-      <input matInput formControlName="experience">
-    </mat-form-field>
-
-    <mat-form-field appearance="fill">
-      <mat-label>Посвідчення водія</mat-label>
-      <mat-select [disableOptionCentering]="true" formControlName="driversLicence" multiple>
-        <mat-option *ngFor="let licence of licenseTypes" [value]="licence">
-          {{licence}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </form>-->
 </mat-dialog-content>
 
 <mat-dialog-actions>
