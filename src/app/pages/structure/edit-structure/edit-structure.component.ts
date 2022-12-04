@@ -3,6 +3,7 @@ import {Degree, User} from "../../users/users.component";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
+// TODO: add unsubscribe
 @Component({
   selector: 'app-edit-structure',
   templateUrl: './edit-structure.component.html',
@@ -38,16 +39,19 @@ export class EditStructureComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.parentNodes = [this.emptyNode, ...this.data.nodesFullTitles]
-    /*if (this.data.creation) {
-      this.title = "Занести нового працівника"
+    this.parentNodes = [this.emptyNode, ...this.data.nodesFullTitles];
+    console.log('DEBUG parentNodes: ', this.parentNodes);
+    if(this.data?.selectedNode) {
+      this.unitForm.controls['parentNode'].setValue(this.data.selectedNode)
     } else {
-      this.title = "Змінити дані працівника"
-      this.userForm.controls['inn'].disable();
-      this.userForm.setValue(this.data.user);
-      this.userForm.controls['driversLicence'].setValue(this.data.user.driversLicence.split(','))
-    }*/
+      this.unitForm.controls['parentNode'].setValue(this.parentNodes[0])
+    }
+    this.unitForm.controls['parentNode'].disable();
+
+    if(this.data?.selectedUnitType) {
+      this.unitForm.controls['unitType'].setValue(this.data.selectedUnitType);
+      this.unitForm.controls['unitType'].disable();
+    }
   }
 
   submit() {
