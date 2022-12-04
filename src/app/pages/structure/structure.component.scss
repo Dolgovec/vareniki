@@ -1,19 +1,27 @@
-.example-tree-invisible {
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+$nested-node-padding: 40px;
+
+
+.organisation-tree-invisible {
   display: none;
 }
 
-.example-tree ul,
-.example-tree li {
+/*
+.organisation-tree ul,
+.organisation-tree li {
   margin-top: 0;
   margin-bottom: 0;
   list-style-type: none;
 }
+*/
 
 /*
  * This padding sets alignment of the nested nodes.
  */
-.example-tree .mat-nested-tree-node div[role=group] {
-  padding-left: 40px;
+.organisation-tree .mat-nested-tree-node div[role=group] {
+  padding-left: $nested-node-padding;
 }
 
 /*
@@ -21,28 +29,117 @@
  * Leaf nodes need to have padding so as to align with other non-leaf nodes
  * under the same parent.
  */
-/*.example-tree div[role=group] > .mat-tree-node {
-  padding-left: 40px;
-}*/
-
-.content-wrapper {
-  display: flex;
-  justify-content: space-between;
-
-  .tree-block  {
-    flex: 1
-  }
+.organisation-tree div[role=group] > .mat-tree-node {
+  padding-left: $nested-node-padding / 2
 }
 
-
-.job-description {
+.org-position {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  border-bottom: 1px solid black;
+}
+
+.org-position-icon {
+  margin-right: 0.25em;
 }
 
 .requirements-list {
   padding-left: 20px;
   margin-top: 10px;
+}
+
+.nested-tree {
+  position: relative;
+}
+
+.nested-tree:before {
+  content: "";
+  display: block;
+  width: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 19.5px;
+  border-left: 1px solid;
+}
+
+.mat-nested-tree-node, .mat-tree-node {
+  position: relative;
+}
+
+/*
+.mat-nested-tree-node .mat-nested-tree-node:last-child {
+  color: red;
+}
+*/
+
+
+.mat-nested-tree-node .mat-nested-tree-node:last-child:before, .mat-tree-node:last-child:before {
+  background: #ffffff;
+  bottom: 0;
+}
+
+
+.mat-nested-tree-node .mat-nested-tree-node:before, .mat-tree-node:before {
+  content: "";
+  position: absolute;
+  top: $nested-node-padding / 2;
+  width: $nested-node-padding - 10;
+  left: - ($nested-node-padding / 2 + 0.5);
+  border-top: 1px solid black;
+}
+
+.expandable-node, .org-position-title  {
+  display: flex;
+  align-items: center;
+}
+
+.node-title, .org-position-title {
+  margin: 0;
+}
+
+.org-position-title {
+  min-height: 40px;
+}
+
+.vacant-position, .incomplete-unit {
+  color: map.get(mat.$red-palette, 500)
+}
+
+.options-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.structure-search-field {
+  width: 350px
+}
+
+.add-subdivision-btn, .remove-subdivision-btn {
+  margin-left: 0.25em;
+}
+
+.add-unit-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.buttons-block {
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tree-bloc {
+  padding: 1em;
+}
+
+.job-description {
+  // test styles
+  height: 200px;
+  width: 100px;
 }

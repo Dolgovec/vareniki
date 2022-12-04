@@ -1,0 +1,75 @@
+<h2 mat-dialog-title>Створення нової сутності</h2>
+<mat-dialog-content>
+  <form class="vertical-form" [formGroup]="unitForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Старший відділ</mat-label>
+      <mat-select [disableOptionCentering]="true" formControlName="parentNode">
+        <mat-option *ngFor="let node of parentNodes" [value]="node">
+          {{node}}
+        </mat-option>
+      </mat-select>
+      <mat-hint>Відділ до якого належить</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Тип</mat-label>
+      <mat-select [disableOptionCentering]="true" formControlName="unitType">
+        <mat-option *ngFor="let type of unitTypes" [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <form *ngIf="unitForm.controls['unitType'].value === unitTypes[0]" class="vertical-form" [formGroup]="departmentForm">
+    <h2>Параметри віддділу</h2>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Назва відділу</mat-label>
+      <input matInput formControlName="title">
+    </mat-form-field>
+  </form>
+
+  <form *ngIf="unitForm.controls['unitType'].value === unitTypes[1]" class="vertical-form" [formGroup]="positionForm">
+    <h2>Параметри посади</h2>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Назва посади</mat-label>
+      <input matInput formControlName="title">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Освіта</mat-label>
+      <mat-select [disableOptionCentering]="true" formControlName="education">
+        <mat-option *ngFor="let degree of degrees" [value]="degree">
+          {{degree}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Стаж роботи</mat-label>
+      <input matInput formControlName="experience">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Посвідчення водія</mat-label>
+      <mat-select [disableOptionCentering]="true" formControlName="driversLicence" multiple>
+        <mat-option *ngFor="let licence of licenseTypes" [value]="licence">
+          {{licence}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button color="warn" mat-flat-button mat-dialog-close>Відмінити</button>
+  <button color="primary" (click)="submit()"
+          [disabled]="unitForm.invalid || (unitForm.controls['unitType'].value === 'відділ' ? departmentForm.invalid : positionForm.invalid)"
+          mat-flat-button>
+    Зберегти
+  </button>
+</mat-dialog-actions>
+
+
