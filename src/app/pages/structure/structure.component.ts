@@ -56,7 +56,10 @@ export class StructureComponent implements OnInit {
     this.dialog.open(EditStructureComponent,
       {
         width: '450px',
-        data: {nodesFullTitles: this.nodesFullTitles}
+        data: {
+          nodesFullTitles: this.nodesFullTitles,
+          selectedUnitType: UnitType.DEPARTMENT
+        }
       }
     );
   }

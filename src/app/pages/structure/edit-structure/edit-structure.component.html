@@ -2,7 +2,7 @@
 <mat-dialog-content>
   <form class="vertical-form" [formGroup]="unitForm">
     <mat-form-field appearance="fill">
-      <mat-label>Відділ</mat-label>
+      <mat-label>Старший відділ</mat-label>
       <mat-select [disableOptionCentering]="true" formControlName="parentNode">
         <mat-option *ngFor="let node of parentNodes" [value]="node">
           {{node}}
@@ -104,7 +104,11 @@
 
 <mat-dialog-actions>
   <button color="warn" mat-flat-button mat-dialog-close>Відмінити</button>
-  <button color="primary" (click)="submit()" mat-flat-button>Зберегти</button>
+  <button color="primary" (click)="submit()"
+          [disabled]="unitForm.invalid || (unitForm.controls['unitType'].value === 'відділ' ? departmentForm.invalid : positionForm.invalid)"
+          mat-flat-button>
+    Зберегти
+  </button>
 </mat-dialog-actions>
 
 

@@ -29,7 +29,6 @@ export class EditStructureComponent implements OnInit {
   });
 
   positionForm: FormGroup = new FormGroup({
-    name: new FormControl('', Validators.required),
     education: new FormControl('', Validators.required),
     experience: new FormControl('', Validators.required),
     driversLicence: new FormControl('', Validators.required)
