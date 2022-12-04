@@ -10,11 +10,18 @@ import {MatListModule} from "@angular/material/list";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatInputModule} from "@angular/material/input";
+import {MatDividerModule} from "@angular/material/divider";
+import { EditStructureComponent } from './edit-structure/edit-structure.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatSelectModule} from "@angular/material/select";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 
 @NgModule({
   declarations: [
-    StructureComponent
+    StructureComponent,
+    EditStructureComponent
   ],
   imports: [
     CommonModule,
@@ -26,6 +33,11 @@ import {MatInputModule} from "@angular/material/input";
     MatFormFieldModule,
     MatCheckboxModule,
     MatInputModule,
+    MatDividerModule,
+    MatDialogModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    MatTooltipModule,
     RouterModule.forChild([{path: '', component: StructureComponent, pathMatch: 'full'}])
   ]
 })

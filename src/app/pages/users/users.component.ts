@@ -20,11 +20,6 @@ export interface Director {
   employee: User;
 }
 
-enum Gender {
-  MALE = "чоловіча",
-  FEMALE = "жіноча"
-}
-
 export enum Degree {
   MIDDLE = "Середня",
   HIGHER = "Вища",

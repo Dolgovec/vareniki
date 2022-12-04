@@ -120,12 +120,24 @@ $nested-node-padding: 40px;
   width: 350px
 }
 
-.add-subdivision-btn {
+.add-subdivision-btn, .remove-subdivision-btn {
   margin-left: 0.25em;
 }
 
 .add-unit-btn {
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+.buttons-block {
+  width: 250px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tree-bloc {
+  padding: 1em;
 }
