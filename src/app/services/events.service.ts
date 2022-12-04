@@ -7,14 +7,14 @@ import {HttpClient} from "@angular/common/http";
 import {SharedService} from "./shared.service";
 
 export interface WorkOrder {
-  id: number;
+  id?: number;
   title: string;
   description: string;
-  initiator: User;
-  participants: Director[];
-  employee: User[];
-  fromDate: Date;
-  toDate: Date;
+  initiator?: User;
+  participants?: Director[];
+  performers?: User[];
+  fromDate?: Date;
+  toDate?: Date;
 }
 
 @Injectable({

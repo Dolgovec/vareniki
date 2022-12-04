@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {tap} from "rxjs";
+import {Subject, tap} from "rxjs";
 import {SharedService} from "./shared.service";
+import {Router} from "@angular/router";
 
 export interface ITokenData {
   access_token: string;
@@ -20,12 +21,17 @@ export interface ITokenData {
 })
 export class AuthService {
 
+  tokenChanged: Subject<string> = new Subject<string>();
+
   constructor(private http: HttpClient,
+              private router: Router,
               private sharedService: SharedService) {
   }
 
   setAuthToken(token: string): void {
     localStorage.setItem('token', token);
+
+    this.tokenChanged.next(token);
   }
 
   getAuthToken(): string {
@@ -52,6 +58,13 @@ export class AuthService {
         this.applyTokenData(tokenData);
       })
     );
+  }
+
+  logout(): void {
+    localStorage.removeItem('token');
+    this.tokenChanged.next('');
+
+    this.router.navigate(['login']);
   }
 
   private applyTokenData(tokenData: ITokenData) {

@@ -25,9 +25,10 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value['username'], this.loginForm.value['password']).subscribe( (response: ITokenData) => {
-        this.router.navigate(['/']);
-      });
+      const token = window.btoa(`${this.loginForm.value['username']}:${this.loginForm.value['password']}`);
+
+      this.authService.setAuthToken(token);
+      this.router.navigate(['/']);
     }
   }
 

@@ -1,3 +1,4 @@
+<h2 class="mt-0">Форма події</h2>
 <form [formGroup]="form">
   <div class="row">
     <mat-form-field appearance="fill">
@@ -20,9 +21,9 @@
   <div class="row">
     <mat-form-field appearance="fill">
       <mat-label>Керівники</mat-label>
-      <mat-select formControlName="admins" multiple>
-        <mat-option *ngFor="let admin of admins" [value]="admin">
-          {{admin.name}}
+      <mat-select formControlName="participants" multiple>
+        <mat-option *ngFor="let admin of participants" [value]="admin">
+          {{admin.firstName + ' ' + admin.lastName}}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -36,8 +37,8 @@
     <mat-form-field appearance="fill">
       <mat-label>Дати</mat-label>
       <mat-date-range-input [rangePicker]="picker">
-        <input matStartDate formControlName="dateFrom" placeholder="Дата початку">
-        <input matEndDate formControlName="dateTo" placeholder="Дата кінця">
+        <input matStartDate formControlName="fromDate" placeholder="Дата початку">
+        <input matEndDate formControlName="toDate" placeholder="Дата кінця">
       </mat-date-range-input>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
@@ -55,15 +56,37 @@
     </mat-form-field>
   </div>
 
-  <button *ngIf="event?.id && !event?.status" mat-raised-button color="primary" (click)="confirmEvent()" [disabled]="!form.valid || isConfirmed">
-    Підтвердити
+  <button *ngIf="event?.id && !event?.status" mat-raised-button color="primary" (click)="editEvent()" [disabled]="!form.valid">
+    Зберегти
   </button>
 
-  <span *ngIf="isConfirmed">
-    Підтверджено! Чекаємо на підтвердження від інших керівників
-  </span>
+  <button *ngIf="event?.id && !event?.status" mat-raised-button color="primary" (click)="confirmEvent()" [disabled]="!form.valid">
+    Підписати
+  </button>
 
   <button *ngIf="event?.status" mat-raised-button color="primary" (click)="downloadDoc()">
     Скачати документ
   </button>
 </form>
+
+
+<div class="row" *ngIf="event?.id">
+  <h2>Коментарі</h2>
+  <div class="comments-block" *ngIf="comments.length">
+    <div class="comment" *ngFor="let comment of comments">
+      <div class="comment-title">{{comment.name}}</div>
+      <div class="comment-text">{{comment.comment}}</div>
+    </div>
+  </div>
+
+  <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+    <mat-form-field class="fill">
+      <mat-label>Ваш коментар</mat-label>
+      <textarea matInput formControlName="comment"></textarea>
+    </mat-form-field>
+
+    <button type="submit" mat-raised-button color="primary" [disabled]="!commentForm.valid">
+      Відправити
+    </button>
+  </form>
+</div>

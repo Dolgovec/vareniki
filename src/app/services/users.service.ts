@@ -18,6 +18,10 @@ export class UsersService {
     return this.http.get<User[]>(this.sharedService.getFullUrl('employee'));
   }
 
+  getParticipants(): Observable<User[]> {
+    return this.http.get<User[]>(this.sharedService.getFullUrl('participants'));
+  }
+
   getUserByInn(id: string): Observable<User> {
     return this.http.get<User>(this.sharedService.getFullUrl(`employee/${id}`));
   }
