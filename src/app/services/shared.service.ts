@@ -9,7 +9,7 @@ export class SharedService {
   constructor() { }
 
   getApiPath(): string {
-    return environment.production ? environment.backendUrl : '/';
+    return environment.production ? environment.backendUrl : 'api/';
   }
 
   getFullUrl(url: string): string {
