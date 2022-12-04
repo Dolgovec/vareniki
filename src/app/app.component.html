@@ -1,17 +1,25 @@
 <header *ngIf="isAuthed">
-  <button mat-button [routerLink]="''">
-    Головна
-  </button>
-  <button mat-button [routerLink]="'events'" [routerLinkActive]="'active'">
-    Події
-  </button>
-  <button mat-button [routerLink]="'/users'" [routerLinkActive]="'active'">
-    Працівники
-  </button>
+  <div class="left-part">
+    <button mat-button [routerLink]="''">
+      Головна
+    </button>
+    <button mat-button [routerLink]="'events'" [routerLinkActive]="'active'">
+      Події
+    </button>
+    <button mat-button [routerLink]="'/users'" [routerLinkActive]="'active'">
+      Працівники
+    </button>
 
-  <button mat-button [routerLink]="'/structure'" [routerLinkActive]="'active'">
-    Структура
-  </button>
+    <button mat-button [routerLink]="'/structure'" [routerLinkActive]="'active'">
+      Структура
+    </button>
+  </div>
+
+  <div class="right-part">
+    <button mat-button (click)="logout()">
+      Вийти
+    </button>
+  </div>
 
   <!--<mat-tab-group dynamicHeight>
     <mat-tab [routerLink]="'/'" label="Home"></mat-tab>

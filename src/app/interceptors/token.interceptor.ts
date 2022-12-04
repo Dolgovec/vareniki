@@ -20,7 +20,7 @@ export class TokenInterceptor implements HttpInterceptor {
 
     if (token) {
       request = request.clone({
-        setHeaders: {Authorization: `Bearer ${token}`}
+        setHeaders: {Authorization: `Basic ${token}`}
       });
     } else {
       //this.redirectToLogin();
@@ -30,7 +30,7 @@ export class TokenInterceptor implements HttpInterceptor {
       catchError((err) => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
-            this.redirectToLogin();
+            this.authService.logout();
           }
         }
         return throwError(err);
