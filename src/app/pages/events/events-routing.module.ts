@@ -26,6 +26,10 @@ const routes: Routes = [
       //order: GetOrderByIdResolver
     }
   },
+  {
+    path: 'events/injury/:id',
+    component: InjuryPageComponent,
+  },
 ];
 
 @NgModule({

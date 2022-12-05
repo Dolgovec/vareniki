@@ -20,12 +20,29 @@ export interface WorkOrder {
   status?: number;
 }
 
+export interface Injury {
+  id?: number;
+  description: string;
+  place: string;
+  dateTime: any;
+  receipt?: any;
+  medComment: string;
+  financierComment: string;
+  directorComment: string;
+  isStep1Finished: boolean;
+  isStep2Finished: boolean;
+  isStep3Finished: boolean;
+  isStep4Finished: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class EventsService {
 
   currentEvent!: WorkOrder | null;
+
+  currentInjury!: Injury | null;
 
   participants: Supervisor[] = [
     {
@@ -202,6 +219,22 @@ export class EventsService {
       fromDate: new Date('10/29/2022'),
       toDate: new Date('10/30/2022'),
     },
+  ];
+
+  injuriesList: Injury[] = [
+    {
+      "id": 1,
+      "description": "Василь запхнув руку прямо у працюючий станок!!",
+      "place": "Станок з тістом",
+      "dateTime": "2022-12-02T11:35:45.000Z",
+      "medComment": "Рука подроблена, це надовго...",
+      "financierComment": "40000 грн на лікування. 20000 грн на лікарняний. Загалом 60000 грн",
+      "directorComment": "!!!!!",
+      "isStep1Finished": true,
+      "isStep2Finished": true,
+      "isStep3Finished": true,
+      "isStep4Finished": true
+    }
   ];
 
   constructor(private http: HttpClient,

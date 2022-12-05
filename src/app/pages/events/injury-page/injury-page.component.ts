@@ -5,6 +5,8 @@ import {IEvent} from "../events.component";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {jsPDF} from "jspdf";
 import * as moment from 'moment';
+import {EventsService, Injury} from "../../../services/events.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-injury-page',
@@ -13,7 +15,7 @@ import * as moment from 'moment';
 })
 export class InjuryPageComponent implements OnInit {
 
-  event!: IEvent | null;
+  injury!: Injury | null;
   todayDate: Date = new Date();
 
   commentForm: UntypedFormGroup = new UntypedFormGroup({
@@ -45,11 +47,54 @@ export class InjuryPageComponent implements OnInit {
     comment: new FormControl(''),
   });
 
+  isStep4Finished: boolean = false;
+
   comments: Comment[] = [];
 
-  constructor(private matSnackBar: MatSnackBar) { }
+  constructor(private matSnackBar: MatSnackBar,
+              private eventsService: EventsService,
+              private router: Router) { }
 
   ngOnInit(): void {
+    if (this.eventsService.currentInjury) {
+      this.injury = this.eventsService.currentInjury;
+
+      this.step1Form.patchValue({
+        description: this.injury.description || '',
+        place: this.injury.place || '',
+        dateTime: this.injury.dateTime || null
+      });
+
+      this.step2Form.patchValue({
+        comment: this.injury.medComment || ''
+      });
+
+      this.step3Form.patchValue({
+        comment: this.injury.financierComment || ''
+      });
+
+      this.step4Form.patchValue({
+        comment: this.injury.directorComment || ''
+      });
+
+      this.isStep1Finished = this.injury.isStep1Finished;
+      this.isStep2Finished = this.injury.isStep2Finished;
+      this.isStep3Finished = this.injury.isStep3Finished;
+      this.isStep4Finished = this.injury.isStep4Finished;
+
+      if (this.isStep1Finished) {
+        this.step1Form.disable();
+      }
+      if (this.isStep2Finished) {
+        this.step2Form.disable();
+      }
+      if (this.isStep3Finished) {
+        this.step3Form.disable();
+      }
+      if (this.isStep4Finished) {
+        this.step4Form.disable();
+      }
+    }
   }
 
   submitComment(): void {
@@ -66,9 +111,13 @@ export class InjuryPageComponent implements OnInit {
     this.isStep1Finished = true;
     this.step1Form.disable();
 
+    this.saveInjury();
+
     this.matSnackBar.open('Успішно збережено та передано до мед.працівника', '', {
       duration: 3000,
     });
+
+    this.router.navigate(['events']);
     // TODO: implement step 1 submit
   }
 
@@ -76,9 +125,13 @@ export class InjuryPageComponent implements OnInit {
     this.isStep2Finished = true;
     this.step2Form.disable();
 
+    this.saveInjury();
+
     this.matSnackBar.open('Успішно збережено та передано до фінансиста', '', {
       duration: 3000,
     });
+
+    this.router.navigate(['events']);
     // TODO: implement step 2 submit
   }
 
@@ -86,16 +139,47 @@ export class InjuryPageComponent implements OnInit {
     this.isStep3Finished = true;
     this.step3Form.disable();
 
+    this.saveInjury();
+
     this.matSnackBar.open('Успішно збережено та передано до директора', '', {
       duration: 3000,
     });
+
+    this.router.navigate(['events']);
     // TODO: implement step 3 submit
   }
 
   submitStep4(): void {
+    this.isStep4Finished = true;
+    this.saveInjury();
+
     this.matSnackBar.open('Підтверджено!', '', {
       duration: 3000,
     });
+    this.router.navigate(['events']);
+  }
+
+  private saveInjury(): void {
+    const currentInjury: Injury = {
+      id: this.injury?.id || this.eventsService.injuriesList.length + 1,
+      description: this.step1Form.get('description')?.value,
+      place: this.step1Form.get('place')?.value,
+      dateTime: this.step1Form.get('dateTime')?.value,
+      medComment: this.step2Form.get('comment')?.value,
+      financierComment: this.step3Form.get('comment')?.value,
+      directorComment: this.step4Form.get('comment')?.value,
+      isStep1Finished: this.isStep1Finished,
+      isStep2Finished: this.isStep2Finished,
+      isStep3Finished: this.isStep3Finished,
+      isStep4Finished: this.isStep4Finished,
+    };
+
+    if (!this.injury?.id) {
+      this.eventsService.injuriesList.push(currentInjury);
+    } else {
+      const injuryInTheListIndex = this.eventsService.injuriesList.findIndex(o => o.id === this.injury?.id);
+      this.eventsService.injuriesList[injuryInTheListIndex] = currentInjury;
+    }
   }
 
   downloadReceipt(): void {

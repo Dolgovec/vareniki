@@ -164,9 +164,9 @@ export const userServiceMockData = [{
           "title": "Начальник цеху",
           "employee": {
             "inn": "1234668891",
-            "firstName": "Ім`я2",
-            "middleName": "По-батькові2",
-            "lastName": "Прізвище2",
+            "firstName": "Олексій",
+            "middleName": "Сергійович",
+            "lastName": "Дуб",
             "education": "Вища",
             "experience": "5",
             "driversLicence": "BC"
@@ -237,9 +237,9 @@ export const userServiceMockData = [{
           "title": "Начальник цеху",
           "employee": {
             "inn": "1234668892",
-            "firstName": "Ім`я3",
-            "middleName": "По-батькові3",
-            "lastName": "Прізвище3",
+            "firstName": "Максим",
+            "middleName": "Сергійович",
+            "lastName": "Данілов",
             "education": "Вища",
             "experience": "1",
             "driversLicence": "B"
@@ -254,9 +254,9 @@ export const userServiceMockData = [{
           "title": "Начальник конвейера",
           "employee": {
             "inn": "1234668893",
-            "firstName": "Ім`я4",
-            "middleName": "По-батькові4",
-            "lastName": "Прізвище4",
+            "firstName": "Денис",
+            "middleName": "Олександрович",
+            "lastName": "Кравецький",
             "education": "Вища",
             "experience": "1",
             "driversLicence": "B"
@@ -266,9 +266,9 @@ export const userServiceMockData = [{
           "title": "Робочий конвейера",
           "employee": {
             "inn": "1234668894",
-            "firstName": "Ім`я5",
-            "middleName": "По-батькові5",
-            "lastName": "Прізвище5",
+            "firstName": "Дмитро",
+            "middleName": "Максимович",
+            "lastName": "Іванов",
             "education": "Середня",
             "experience": "1",
             "driversLicence": "B"

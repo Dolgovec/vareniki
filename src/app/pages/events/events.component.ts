@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
-import {EventsService, WorkOrder} from "../../services/events.service";
+import {EventsService, Injury, WorkOrder} from "../../services/events.service";
 import {MatTableDataSource} from "@angular/material/table";
 import { jsPDF } from "jspdf";
 import "../../Helvetica_Neue_OTS-normal";
@@ -28,14 +28,18 @@ export interface IEvent {
 export class EventsComponent implements OnInit {
 
   dataSource = new MatTableDataSource<any>();
+  dataSourceInjury = new MatTableDataSource<Injury>();
 
   eventsList: WorkOrder[] = [];
+  injuriesList: Injury[] = [];
 
   displayedColumns: string[] = ['id', 'startDate', 'dates', 'title', 'description', 'participants', 'performers', 'document'];
+  displayedColumnsInjury: string[] = ['id', 'place', 'description', 'dateTime', 'medComment', 'financierComment', 'directorComment'];
 
   constructor(private router: Router,
               private eventsService: EventsService) {
     this.eventsList = this.eventsService.eventsList;
+    this.injuriesList = this.eventsService.injuriesList;
 
     const formattedResult = this.eventsService.eventsList.map((o: WorkOrder) => {
       return {
@@ -50,6 +54,7 @@ export class EventsComponent implements OnInit {
       }
     })
     this.dataSource.data = formattedResult;
+    this.dataSourceInjury.data = this.injuriesList;
   }
 
   ngOnInit(): void {
@@ -77,12 +82,18 @@ export class EventsComponent implements OnInit {
     this.router.navigate([`events/${id}`]);
   }
 
+  routeToInjury(id: number): void {
+    this.eventsService.currentInjury = this.eventsService.injuriesList.find(o => o.id === id)!;
+    this.router.navigate([`events/injury/${id}`]);
+  }
+
   routeToNewEvent(): void {
     this.eventsService.currentEvent = null;
     this.router.navigate([`events/new_event`]);
   }
 
-  routeToInjury(): void {
+  routeToNewInjury(): void {
+    this.eventsService.currentInjury = null;
     this.router.navigate([`events/new_injury`]);
   }
 
