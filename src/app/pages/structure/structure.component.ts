@@ -44,7 +44,11 @@ export class StructureComponent implements OnInit {
       this.dataSource.data.forEach((unit) => {
         this.nodesFullTitles = [...this.nodesFullTitles, unit.title, ...getFullTitlesForNode(unit, '')];
       });
-      this.tree.treeControl.dataNodes = resp;
+
+      // CRUTCH
+      setTimeout(() => {
+        this.tree.treeControl.dataNodes = resp;
+      })
     });
   }
 
@@ -75,7 +79,6 @@ export class StructureComponent implements OnInit {
 
   addSubUnit(node: OrgNode) {
     // TODO: change
-    console.log('DEBUG add sub unit: ', node);
     let selectedUnitType: UnitType | undefined;
     if (node.positions && node.positions.length > 0) {
       selectedUnitType = UnitType.POSITION;
@@ -102,7 +105,7 @@ export class StructureComponent implements OnInit {
         const nodeIndex: number = getNodeIndexByTitle(seg, currentChildren);
         currentNode = nodeIndex > -1 ? currentChildren[nodeIndex] : null;
         if (currentNode === node) {
-          if (selectedUnitType === UnitType.POSITION) {
+          if (val.unitType === UnitType.POSITION) {
             if (!currentNode.positions) {
               currentNode.positions = [];
             }

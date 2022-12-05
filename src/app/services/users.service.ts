@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, of} from "rxjs";
 import {User} from "../pages/users/users.component";
 import {environment} from "../../environments/environment";
 import {SharedService} from "./shared.service";
+import {userServiceMockData} from "./user-service-mock-data";
 
 export interface Supervisor {
   id: number;
@@ -43,7 +44,8 @@ export class UsersService {
   }
 
   getDepartment(): Observable<any> {
-    return this.http.get(this.sharedService.getFullUrl('department/root'));
+    // return this.http.get(this.sharedService.getFullUrl('department/root'));
+    return of(userServiceMockData);
   }
 
 
