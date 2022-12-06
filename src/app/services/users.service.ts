@@ -44,8 +44,8 @@ export class UsersService {
   }
 
   getDepartment(): Observable<any> {
-    // return this.http.get(this.sharedService.getFullUrl('department/root'));
-    return of(userServiceMockData);
+    return this.http.get(this.sharedService.getFullUrl('department/root'));
+    //return of(userServiceMockData);
   }
 
 
